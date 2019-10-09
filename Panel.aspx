@@ -70,14 +70,24 @@
                                 alt="User picture">
                         </div>
                         <div class="user-info">
-                            <span class="user-name">Jhon
+                            <span class="user-name">
+                                <asp:Label ID="lblNombreUsuario" runat="server" Text=""></asp:Label>
+                                <strong>
 
-                            <strong>Smith</strong>
+                                    <asp:Label ID="lblNombreApellidos" runat="server" Text=""></asp:Label>
+                                </strong>
                             </span>
-                            <span class="user-role">Administrator</span>
+                            <span class="user-role">
+                                <asp:Label ID="lblCorporativo" runat="server" Text="" Font-Size="Smaller"></asp:Label></span>
+                            <span class="user-role">
+                                <asp:Label ID="lblOperadora" runat="server" Text="" Font-Size="Smaller"></asp:Label>
+                            </span>
                             <span class="user-status">
-                                <i class="fa fa-circle"></i>
-                                <span>Online</span>
+
+                                <i class="fa fa-circle" runat="server" id="i_EstatusUsuario" style="color: #bf474e"></i>
+                                <span>
+                                    <asp:Label ID="lbl_EstatusUsuario" runat="server" Text="" Font-Size="Smaller"></asp:Label>
+                                </span>
                             </span>
                         </div>
                     </div>
@@ -224,7 +234,7 @@
                                         <asp:UpdatePanel ID="upControlClientes" runat="server" UpdateMode="Conditional">
                                             <ContentTemplate>
                                                 <li>
-                                                    <asp:LinkButton CssClass="buttonClass" ID="lkbControlClientes" runat="server" >
+                                                    <asp:LinkButton CssClass="buttonClass" ID="lkbControlClientes" runat="server">
                                                         <span>Clientes
                                                         </span>
                                                     </asp:LinkButton>
@@ -234,7 +244,7 @@
                                         <asp:UpdatePanel ID="upControlProveedores" runat="server" UpdateMode="Conditional">
                                             <ContentTemplate>
                                                 <li>
-                                                    <asp:LinkButton CssClass="buttonClass" ID="lkbControlProveedores" runat="server" >
+                                                    <asp:LinkButton CssClass="buttonClass" ID="lkbControlProveedores" runat="server">
                                                         <span>Proveedores
                                                         </span>
                                                     </asp:LinkButton>
@@ -307,6 +317,20 @@
             <main class="page-content">
                 <div class="container-fluid">
                     <div class="col-md-12" runat="server">
+                        <asp:UpdatePanel ID="upbreadcrumb" runat="server" UpdateMode="Conditional">
+                            <ContentTemplate>
+                                <nav aria-label="breadcrumb" runat="server" id="navbreadcrumb" visible="false">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item">
+                                            <asp:Label ID="breadcrumbN1" runat="server"></asp:Label></li>
+                                        <li class="breadcrumb-item">
+                                            <asp:Label ID="breadcrumbN2" runat="server"></asp:Label></li>
+                                        <li class="breadcrumb-item">
+                                            <asp:Label ID="breadcrumbN3" runat="server"></asp:Label></li>
+                                    </ol>
+                                </nav>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
                         <asp:UpdatePanel ID="upCentro" runat="server" UpdateMode="Conditional">
                             <ContentTemplate>
                                 <div class="card" runat="server" id="cardCentro" visible="false">
@@ -541,24 +565,35 @@
                         <asp:UpdatePanel ID="upUsuario" runat="server" UpdateMode="Conditional">
                             <ContentTemplate>
                                 <div class="card" runat="server" id="cardUsuario" visible="false">
-                                    <div class="card-header ">
-                                        <div class="text-right">
+                                    <div class="card-header bg-secondary">
 
-                                            <div class="input-group">
-
-                                                <asp:LinkButton ID="lkbAgregarUsuario" CssClass="btn" runat="server" TabIndex="1" OnClick="lkbAgregarUsuario_Click">
-                                                                    <i class="fas fa-plus  text-secondary fa-lg"></i>
+                                        <div class="input-group">
+                                            <asp:LinkButton ID="lkbUsuarioAgregar" CssClass="btn btn-light" runat="server" TabIndex="1" OnClick="lkbUsuarioAgregar_Click">
+                                                                    Agregar <i class="fas fa-plus text-secondary fa-lg"></i>
+                                            </asp:LinkButton>
+                                            &nbsp;
+                                                <asp:LinkButton ID="lkbUsuarioEdita" CssClass="btn btn-light" runat="server" TabIndex="2" OnClick="lkbUsuarioEdita_Click">
+                                                                    Editar <i class="fas fa-edit text-secondary fa-lg"></i>
                                                 </asp:LinkButton>
-                                                <asp:TextBox CssClass="form-control" ID="iBuscaUsuario" runat="server" placeholder="Buscar Usuario" TextMode="Search" TabIndex="3"></asp:TextBox>
-
-                                                <ajaxToolkit:AutoCompleteExtender ID="aceBuscaUsuario" runat="server" ServiceMethod="busca_pnl" MinimumPrefixLength="2" CompletionInterval="100" EnableCaching="true" CompletionSetCount="10" TargetControlID="iBuscaUsuario" FirstRowSelected="false"></ajaxToolkit:AutoCompleteExtender>
-                                                <span class="input-group-btn">
-                                                    <asp:LinkButton ID="lkbBuscaUsuario" runat="server" CssClass="btn btn-secondary form-control" TabIndex="4" OnClick="lkbBuscaUsuario_Click">
-                                                                    <i class="fas fa-search"></i>
-                                                    </asp:LinkButton>
-                                                </span>
-                                            </div>
                                         </div>
+                                        <br />
+                                        <div class="input-group" runat="server" id="divBuscaUsuario" visible="false">
+
+                                            <div class="form-group">
+                                                <select class="form-control" runat="server" id="sBusquedaUsuario" tabindex="3">
+                                                </select>
+                                            </div>
+
+                                            <asp:TextBox CssClass="form-control" ID="iUsuarioBuscar" runat="server" placeholder="*Buscar" TextMode="Search" TabIndex="4"></asp:TextBox>
+
+                                            <ajaxToolkit:AutoCompleteExtender ID="aceUsuarioBuscar" runat="server" ServiceMethod="busca_pnl" MinimumPrefixLength="2" CompletionInterval="100" EnableCaching="true" CompletionSetCount="10" TargetControlID="iUsuarioBuscar" FirstRowSelected="false"></ajaxToolkit:AutoCompleteExtender>
+                                            <span class="input-group-btn">
+                                                <asp:LinkButton ID="lkbUsuarioBuscar" runat="server" CssClass="btn btn-light  form-control" TabIndex="5">
+                                                                    <i class="fas fa-search"></i>
+                                                </asp:LinkButton>
+                                            </span>
+                                        </div>
+
                                     </div>
                                     <div class="card-body">
                                         <div class="row">

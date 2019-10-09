@@ -9,14 +9,103 @@ namespace IntelimundoERP
 {
     public partial class Panel : System.Web.UI.Page
     {
+        public static Guid empf_ID = Guid.Empty, usr_ID = Guid.Empty;
+        public static string str_pnlID = string.Empty, nombre_rpt = string.Empty;
+
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            try
+            {
+                if (!IsPostBack)
+                {
+                    try
+                    {
+                        UsuarioFiltrado();
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+            catch
+            {
+                Response.Redirect("acceso.aspx");
+            }
         }
+
+        private void UsuarioFiltrado()
+        {
+            usr_ID = (Guid)(Session["UsuarioFirmadoID"]);
+            using (var mUsuario = new IntelimundoERPEntities())
+            {
+                var iUsuario = (from a in mUsuario.tblUsuarios
+                                where a.UsuarioID == usr_ID
+                                select a
+                                ).FirstOrDefault();
+
+                switch (iUsuario.TipoUsuarioID)
+                {
+                    case 1:
+
+                        break;
+
+                    case 2:
+
+                        var iUsuarioEmpresa = (from a in mUsuario.tblUsuarios
+                                               join b in mUsuario.tblUsuariosEmpresa on a.UsuarioID equals b.UsuarioID
+                                               join c in mUsuario.tblEmpresa on b.EmpresaID equals c.EmpresaID
+                                               where a.UsuarioID == usr_ID
+                                               select new
+                                               {
+                                                   a.PerfilID,
+                                                   a.nombres,
+                                                   a.apaterno,
+                                                   a.amaterno,
+                                                   c.Nombre
+                                               }
+                                ).FirstOrDefault();
+
+                        lblNombreUsuario.Text = iUsuarioEmpresa.nombres;
+                        lblNombreApellidos.Text = iUsuarioEmpresa.apaterno + ' ' + iUsuarioEmpresa.amaterno;
+                        lblCorporativo.Text = "Empresa: " + iUsuarioEmpresa.Nombre;
+
+                        break;
+
+                    case 3:
+
+                        var iUsuarioCorp = (from a in mUsuario.tblUsuarios
+                                            join b in mUsuario.tbl_UsuariosCorporativo on a.UsuarioID equals b.UsuarioID
+                                            join c in mUsuario.tblCorporativo on b.CorporativoID equals c.CorporativoID
+                                            where a.UsuarioID == usr_ID
+                                            select new
+                                            {
+                                                a.PerfilID,
+                                                a.nombres,
+                                                a.apaterno,
+                                                a.amaterno,
+                                                c.Nombre
+                                            }).FirstOrDefault();
+
+                        lblNombreUsuario.Text = iUsuarioCorp.nombres;
+                        lblNombreApellidos.Text = iUsuarioCorp.apaterno + ' ' + iUsuarioCorp.amaterno;
+                        lblCorporativo.Text = "Corporativo: " + iUsuarioCorp.Nombre;
+
+                        break;
+                }
+            }
+
+            i_EstatusUsuario.Attributes["style"] = "color: green";
+            lbl_EstatusUsuario.Text = "Conectado";
+        }
+
 
         #region ControlCentros
         protected void lkbControlCentros_Click(object sender, EventArgs e)
         {
+            breadcrumbN1.Text = "Control de Datos";
+            breadcrumbN2.Text = "Centros";
+            navbreadcrumb.Visible = true;
+            upbreadcrumb.Update();
             cardUsuario.Visible = false;
             upUsuario.Update();
        
@@ -191,6 +280,10 @@ namespace IntelimundoERP
 
         protected void lkbControlUsuarios_Click(object sender, EventArgs e)
         {
+            breadcrumbN1.Text = "Control de Datos";
+            breadcrumbN2.Text = "Usuarios";
+            navbreadcrumb.Visible = true;
+            upbreadcrumb.Update();
             cardUsuario.Visible = true;
             upUsuario.Update();
             cardCentro.Visible = false;
@@ -217,6 +310,16 @@ namespace IntelimundoERP
         }
 
         protected void btnCodigoPostalFiscalC_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void lkbUsuarioEdita_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void lkbUsuarioAgregar_Click(object sender, EventArgs e)
         {
 
         }

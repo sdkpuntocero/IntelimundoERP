@@ -24,6 +24,60 @@ namespace IntelimundoERP
         protected global::System.Web.UI.ScriptManager ScriptManager1;
 
         /// <summary>
+        /// Control lblNombreUsuario.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblNombreUsuario;
+
+        /// <summary>
+        /// Control lblNombreApellidos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblNombreApellidos;
+
+        /// <summary>
+        /// Control lblCorporativo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCorporativo;
+
+        /// <summary>
+        /// Control lblOperadora.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblOperadora;
+
+        /// <summary>
+        /// Control i_EstatusUsuario.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl i_EstatusUsuario;
+
+        /// <summary>
+        /// Control lbl_EstatusUsuario.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_EstatusUsuario;
+
+        /// <summary>
         /// Control upControlUsuarios.
         /// </summary>
         /// <remarks>
@@ -139,6 +193,51 @@ namespace IntelimundoERP
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lkbSalir;
+
+        /// <summary>
+        /// Control upbreadcrumb.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upbreadcrumb;
+
+        /// <summary>
+        /// Control navbreadcrumb.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl navbreadcrumb;
+
+        /// <summary>
+        /// Control breadcrumbN1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label breadcrumbN1;
+
+        /// <summary>
+        /// Control breadcrumbN2.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label breadcrumbN2;
+
+        /// <summary>
+        /// Control breadcrumbN3.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label breadcrumbN3;
 
         /// <summary>
         /// Control upCentro.
@@ -501,40 +600,67 @@ namespace IntelimundoERP
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl cardUsuario;
 
         /// <summary>
-        /// Control lkbAgregarUsuario.
+        /// Control lkbUsuarioAgregar.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lkbAgregarUsuario;
+        protected global::System.Web.UI.WebControls.LinkButton lkbUsuarioAgregar;
 
         /// <summary>
-        /// Control iBuscaUsuario.
+        /// Control lkbUsuarioEdita.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox iBuscaUsuario;
+        protected global::System.Web.UI.WebControls.LinkButton lkbUsuarioEdita;
 
         /// <summary>
-        /// Control aceBuscaUsuario.
+        /// Control divBuscaUsuario.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::AjaxControlToolkit.AutoCompleteExtender aceBuscaUsuario;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divBuscaUsuario;
 
         /// <summary>
-        /// Control lkbBuscaUsuario.
+        /// Control sBusquedaUsuario.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lkbBuscaUsuario;
+        protected global::System.Web.UI.HtmlControls.HtmlSelect sBusquedaUsuario;
+
+        /// <summary>
+        /// Control iUsuarioBuscar.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox iUsuarioBuscar;
+
+        /// <summary>
+        /// Control aceUsuarioBuscar.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::AjaxControlToolkit.AutoCompleteExtender aceUsuarioBuscar;
+
+        /// <summary>
+        /// Control lkbUsuarioBuscar.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lkbUsuarioBuscar;
 
         /// <summary>
         /// Control gvUsuarios.
