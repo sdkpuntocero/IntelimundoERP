@@ -1,0 +1,100 @@
+﻿/*--color1: #ffffff;
+    --color2: #00171f;
+    --color3: #312782;
+    --color4: #83174F;
+    --color5: #00a8e8;*/
+
+body {
+    background-color: darkgray;
+    color: #00171f;
+    font-family: 'Varela Round', sans-serif;
+}
+
+.form-control {
+    box-shadow: none;
+    border-color: #83174F;
+}
+
+    .form-control:focus {
+        border-color: #7d3954;
+    }
+
+.login-form {
+    width: 350px;
+    margin: 0 auto;
+    padding: 30px 0;
+}
+
+    .login-form form {
+        color: #00171f;
+        border-radius: 1px;
+        margin-bottom: 15px;
+        background: #ffffff;
+        border: 1px solid #7d3954;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+    }
+
+    .login-form h4 {
+        text-align: center;
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .login-form .avatar {
+        color: #00171f;
+        margin: 0 auto 30px;
+        text-align: center;
+        width: 100px;
+        height: 100px;
+    }
+
+        .login-form .avatar i {
+            font-size: 62px;
+        }
+
+    .login-form .form-group {
+        margin-bottom: 20px;
+    }
+
+    .login-form .form-control, .login-form .btn {
+        min-height: 40px;
+        border-radius: 2px;
+        transition: all 0.5s;
+    }
+
+    .login-form .close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+
+    .login-form .btn {
+        background-color: darkgray;
+        border: none;
+        line-height: normal;
+    }
+
+        .login-form .btn:hover, .login-form .btn:focus {
+            background-color: #433d75;
+        }
+
+    .login-form .checkbox-inline {
+        float: left;
+    }
+
+    .login-form input[type="checkbox"] {
+        margin-top: 2px;
+    }
+
+    .login-form .forgot-link {
+        float: right;
+    }
+
+    .login-form .small {
+        font-size: 10px;
+    }
+
+    .login-form a {
+        color: #00171f);
+    }

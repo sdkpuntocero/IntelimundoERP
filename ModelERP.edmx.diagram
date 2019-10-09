@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="269a1b8081b4450f92d17d7b96bca5d7" Name="Diagram1" ZoomLevel="94">
+        <EntityTypeShape EntityType="IntelimundoERPModel.catAreas" Width="1.5" PointX="7.5" PointY="25.625" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.catBusquedaCentro" Width="1.5" PointX="9.75" PointY="11.125" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.catGenero" Width="1.5" PointX="0.75" PointY="5.25" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.catLicencia" Width="1.5" PointX="5.25" PointY="6" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.catPerfil" Width="1.5" PointX="7.5" PointY="29" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.catTipoCentro" Width="1.5" PointX="5.25" PointY="18.375" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.CatTipoRFC" Width="1.5" PointX="0.75" PointY="11.5" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.catTipoUsuario" Width="1.5" PointX="0.75" PointY="7.625" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.tbl_UsuariosCorporativo" Width="1.5" PointX="10.5" PointY="14" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.tblAreasPerfil" Width="1.5" PointX="9.75" PointY="25.75" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.tblCentro" Width="1.5" PointX="7.5" PointY="11.875" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.tblCorporativo" Width="1.5" PointX="5.25" PointY="13" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.tblEmpresa" Width="1.5" PointX="3" PointY="10.375" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.tblMexCP" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.tblNotificacion" Width="1.5" PointX="7.5" PointY="17.625" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.tblServicios" Width="1.5" PointX="7.5" PointY="21.75" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.tblUsuarios" Width="1.5" PointX="3" PointY="5.25" />
+        <EntityTypeShape EntityType="IntelimundoERPModel.tblUsuariosEmpresa" Width="1.5" PointX="5.25" PointY="9.25" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_catAreas_tblCorporativo" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_tblAreasPerfil_catAreas" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_catBusquedaCentro_tblCentro" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_tblUsuarios_catGenero" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_tblCentro_catLicencia" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_tblAreasPerfil_catPerfil" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_tblCentro_catTipoCentro" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_tblEmpresa_CatTipoRFC" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_tblUsuarios_catTipoUsuario" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_tbl_UsuariosCorporativo_tblCorporativo" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_tbl_UsuariosCorporativo_tblUsuarios" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_tblCentro_tblCorporativo" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_Corporativo_Empresa" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_tblNotificacion_tblCorporativo" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_tblServicios_tblCorporativo" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_tblUsuariosEmpresa_tblEmpresa" />
+        <AssociationConnector Association="IntelimundoERPModel.FK_UsuariosEmpresa_tblUsuarios" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
