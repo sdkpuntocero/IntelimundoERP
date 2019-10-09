@@ -55,7 +55,7 @@ namespace IntelimundoERP
                             //Response.Cookies.Add(usr_cookie);
                             Session["UsuarioFirmadoID"] = GuidUsario;
 
-                            Response.Redirect("PanelDeControl.aspx");
+                            Response.Redirect("Panel.aspx");
                         }
                         else
                         {
@@ -74,11 +74,11 @@ namespace IntelimundoERP
                                     {
                                         case 1:
 
-                                            Response.Redirect("PanelDeControl.aspx");
+                                            Response.Redirect("Panel.aspx");
                                             break;
                                         case 2:
 
-                                            Response.Redirect("PanelDeControl.aspx");
+                                            Response.Redirect("Panel.aspx");
                                             break;
                                         case 3:
 
