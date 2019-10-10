@@ -1,5 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.Linq;
+using System.Web.Services;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace IntelimundoERP
 {
@@ -9,6 +15,19 @@ namespace IntelimundoERP
         {
             Guid i_UsuarioID, EmpresaID = Guid.NewGuid(), CorporativoID = Guid.NewGuid();
             string i_CodigoUsuario = string.Empty, i_nombres = string.Empty, i_apaterno = string.Empty, i_amaterno = string.Empty, i_usuario = string.Empty, i_clave = string.Empty;
+
+            TextInfo CINombre = new CultureInfo("es-MX", false).TextInfo;
+            TextInfo CIApaterno = new CultureInfo("es-MX", false).TextInfo;
+            TextInfo CIAmaterno = new CultureInfo("es-MX", false).TextInfo;
+            TextInfo CICompania = new CultureInfo("es-MX", false).TextInfo;
+            TextInfo CICompaniaNombre = new CultureInfo("es-MX", false).TextInfo;
+
+            TextInfo CICalleNum = new CultureInfo("es-MX", false).TextInfo;
+
+            string strNombreUsuario = CINombre.ToTitleCase(Nombre.ToLower());
+            string strApaternoUsuario = CIApaterno.ToTitleCase(Apaterno.ToLower());
+            string strAmaternoUsuario = CIAmaterno.ToTitleCase(Amaterno.ToLower());
+
             try
             {
                 i_nombres = RemueveCaracteresEspeciales.Acentos(RemueveCaracteresEspeciales.CaracteresEspeciales(Nombre.Trim().ToLower()));

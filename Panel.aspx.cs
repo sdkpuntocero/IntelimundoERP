@@ -199,8 +199,7 @@ namespace IntelimundoERP
 
         protected void lkbAgregarUsuario_Click(object sender, EventArgs e)
         {
-            divDatosUsuario.Visible = true;
-            upUsuario.Update();
+           
         }
 
         protected void lkbNotificaciones_Click(object sender, EventArgs e)
@@ -253,19 +252,26 @@ namespace IntelimundoERP
 
         }
 
-        protected void sAreaUsuario_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void btnControlUsuario_Click(object sender, EventArgs e)
-        {
-
-        }
-
         protected void btnUsuarioG_Click(object sender, EventArgs e)
         {
+            string striNombreUsuario = Request.Form["iNombresUsuario"];
+            string striApaternoUsuario = Request.Form["iApaternoUsuario"];
+            string striAmaternoUsuario = Request.Form["iAmaternoUsuario"];
 
+
+
+            int sPerfilUsuario = int.Parse(Request.Form["sPerfilUsuario"]);
+
+            if (ControlUsuarios.AltaUsuario(3, sPerfilUsuario, striNombreUsuario, striApaternoUsuario, striAmaternoUsuario))
+
+            {
+                limpiaRegistroUsuario();
+                Mensaje("Datos guardados con éxito, favor de revisar su correo donde se le enviaran las credenciales de acceso, revisar su bandeja de spam");
+            }
+            else
+            {
+                Mensaje("Error.");
+            }
         }
 
         protected void lkbRegIniEdit_Click(object sender, EventArgs e)
@@ -321,7 +327,96 @@ namespace IntelimundoERP
 
         protected void lkbUsuarioAgregar_Click(object sender, EventArgs e)
         {
+            sComposUsuario();
+            divDatosUsuario.Visible = true;
+            upUsuario.Update();
+            
+        }
+        private void sComposUsuario()
+        {
+            sAreaUsuario.Items.Clear();
+            sPerfilUsuario.Items.Clear();
+            SGeneroUsuario.Items.Clear();
 
+            using (IntelimundoERPEntities mConfiguracion = new IntelimundoERPEntities())
+            {
+                var dConfiguracion = (from c in mConfiguracion.catAreas
+                                      select c).ToList();
+
+                sAreaUsuario.DataSource = dConfiguracion;
+                sAreaUsuario.DataTextField = "Descripcion";
+                sAreaUsuario.DataValueField = "AreaID";
+                sAreaUsuario.DataBind();
+
+                sAreaUsuario.Items.Insert(0, new ListItem("Área", string.Empty));
+
+                var dGenero = (from c in mConfiguracion.catGenero
+                               select c).ToList();
+
+                SGeneroUsuario.DataSource = dGenero;
+                SGeneroUsuario.DataTextField = "Descripcion";
+                SGeneroUsuario.DataValueField = "GeneroID";
+                SGeneroUsuario.DataBind();
+
+                SGeneroUsuario.Items.Insert(0, new ListItem("Género", string.Empty));
+            }
+
+            sPerfilUsuario.Items.Insert(0, new ListItem("Perfil", string.Empty));
+        }
+        protected void sAreaUsuario_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int iAreaUusarios = int.Parse(sAreaUsuario.SelectedValue);
+
+            sPerfilUsuario.Items.Clear();
+
+            using (IntelimundoERPEntities mConfiguracion = new IntelimundoERPEntities())
+            {
+                var dConfiguracion = (from a in mConfiguracion.catPerfil
+                                      join b in mConfiguracion.tblAreasPerfil on a.PerfilID equals b.PerfilID
+                                      where b.AreaID == iAreaUusarios
+                                      select a).ToList();
+
+                sPerfilUsuario.DataSource = dConfiguracion;
+                sPerfilUsuario.DataTextField = "Descripcion";
+                sPerfilUsuario.DataValueField = "PerfilID";
+                sPerfilUsuario.DataBind();
+
+                sPerfilUsuario.Items.Insert(0, new ListItem("Perfil", string.Empty));
+            }
+        }
+
+        protected void btnControlUsuario_Click(object sender, EventArgs e)
+        {
+            Guid guid_usr = Guid.NewGuid();
+
+            string i_nombres = string.Empty, i_aparterno = string.Empty, i_amaterno = string.Empty, strUsuario = string.Empty, str_clave = string.Empty;
+            string i_nombres_o = Request.Form["iNombresUsuario"];
+            string i_aparterno_o = Request.Form["iApaternoUsuario"];
+            string i_amaterno_o = Request.Form["iAmaternoUsuario"];
+
+            try
+            {
+                strUsuario = ControlUsuarios.GeneraUsuario(i_nombres_o, i_aparterno_o, i_amaterno_o);
+                iUsuario.Value = strUsuario;
+
+                iEmailCorporativoUsuario.Value = strUsuario + "@intelimundo.com.mx";
+                btnUsuarioG.Enabled = true;
+            }
+            catch
+            {
+                Mensaje("Se requiere mínimo 2 letras por cada campo(nombre,apellido paterno, apellido materno) para generar el usuario.");
+            }
+        }
+
+        private void limpiaRegistroUsuario()
+        {
+        }
+        private void Mensaje(string contenido)
+        {
+            lblModalTitle.Text = "Intelimundo";
+            lblModalBody.Text = contenido;
+            ScriptManager.RegisterStartupScript(Page, Page.GetType(), "myModal", "$('#myModal').modal();", true);
+            upModal.Update();
         }
     }
 }
