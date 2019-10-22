@@ -12,20 +12,18 @@ namespace IntelimundoERP
     using System;
     using System.Collections.Generic;
     
-    public partial class catLicencia
+    public partial class catEstatusRegistro
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public catLicencia()
+        public catEstatusRegistro()
         {
-            this.tblCentro = new HashSet<tblCentro>();
+            this.tblUsuarios = new HashSet<tblUsuarios>();
         }
     
-        public int LicenciaID { get; set; }
-        public string Descripcion { get; set; }
-        public string Caracteristicas { get; set; }
-        public Nullable<decimal> Precio { get; set; }
+        public int EstatusRegistroID { get; set; }
+        public string EstatusRegistro { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblCentro> tblCentro { get; set; }
+        public virtual ICollection<tblUsuarios> tblUsuarios { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace IntelimundoERP
 {
     public class ControlUsuarios
     {
-        public static bool AltaUsuario(int i_TipoUsuarioID, int i_PerfilUsuarioID, string Nombre, string Apaterno, string Amaterno)
+        public static bool AltaUsuario(int i_TipoUsuarioID, int i_PerfilUsuarioID,int sGeneroUsuario,DateTime iNacimientoUsuario, string Nombre, string Apaterno, string Amaterno)
         {
             Guid i_UsuarioID, EmpresaID = Guid.NewGuid(), CorporativoID = Guid.NewGuid();
             string i_CodigoUsuario = string.Empty, i_nombres = string.Empty, i_apaterno = string.Empty, i_amaterno = string.Empty, i_usuario = string.Empty, i_clave = string.Empty;
@@ -52,92 +52,112 @@ namespace IntelimundoERP
                 i_CodigoUsuario = GeneraCodigoUsuario();
 
 
-                switch (i_TipoUsuarioID)
+                using (IntelimundoERPEntities mUsuarioR = new IntelimundoERPEntities())
                 {
-                    case 2:
-                        using (IntelimundoERPEntities mEmpresa = new IntelimundoERPEntities())
-                        {
-                            var iEmpresa = (from c in mEmpresa.tblEmpresa
-                                            select c).ToList();
+                    var iUsuarioR = (from a in mUsuarioR.tblUsuarios
+                                    where a.Usuario == i_usuario
+                                     select a).ToList();
 
-                            if (iEmpresa.Count == 0)
-                            {
-                            }
-                            else
-                            {
-                                EmpresaID = iEmpresa[0].EmpresaID;
-                            }
+                    if (iUsuarioR.Count == 0)
+                    {
+                        switch (i_TipoUsuarioID)
+                        {
+                            case 2:
+                                using (IntelimundoERPEntities mEmpresa = new IntelimundoERPEntities())
+                                {
+                                    var iEmpresa = (from c in mEmpresa.tblEmpresa
+                                                    select c).ToList();
+
+                                    if (iEmpresa.Count == 0)
+                                    {
+                                    }
+                                    else
+                                    {
+                                        EmpresaID = iEmpresa[0].EmpresaID;
+                                    }
+                                }
+
+                                var i_registro = new IntelimundoERPEntities();
+
+                                var dn_usr = new tblUsuarios
+                                {
+                                    UsuarioID = i_UsuarioID,
+                                    TipoUsuarioID = i_TipoUsuarioID,
+                                    PerfilID = i_PerfilUsuarioID,
+                                    CodigoUsuario = i_CodigoUsuario,
+                                    Usuario = i_usuario,
+                                    Clave = i_clave,
+                                    nombres = strNombreUsuario,
+                                    apaterno = strApaternoUsuario,
+                                    amaterno = strAmaternoUsuario,
+                                    GeneroID = sGeneroUsuario,
+                                    FechaNacimiento = iNacimientoUsuario,
+                                    EstatusRegistroID = 1,
+                                    FechaRegistro = DateTime.Now
+                                };
+
+                                var dn_usremp = new tblUsuariosEmpresa
+                                {
+                                    UsuarioID = i_UsuarioID,
+                                    EmpresaID = EmpresaID,
+                                };
+
+                                i_registro.tblUsuarios.Add(dn_usr);
+                                i_registro.tblUsuariosEmpresa.Add(dn_usremp);
+                                i_registro.SaveChanges();
+                                break;
+                            case 3:
+                                using (IntelimundoERPEntities mEmpresa = new IntelimundoERPEntities())
+                                {
+                                    var iEmpresa = (from c in mEmpresa.tblCorporativo
+                                                    select c).ToList();
+
+                                    if (iEmpresa.Count == 0)
+                                    {
+                                    }
+                                    else
+                                    {
+                                        CorporativoID = iEmpresa[0].CorporativoID;
+                                    }
+                                }
+                                var iUsuarioCorporativo = new IntelimundoERPEntities();
+
+                                var dnUsuarioCorporativo = new tblUsuarios
+                                {
+                                    UsuarioID = i_UsuarioID,
+                                    TipoUsuarioID = i_TipoUsuarioID,
+                                    PerfilID = i_PerfilUsuarioID,
+                                    CodigoUsuario = i_CodigoUsuario,
+                                    Usuario = i_usuario,
+                                    Clave = i_clave,
+                                    nombres = strNombreUsuario,
+                                    apaterno = strApaternoUsuario,
+                                    amaterno = strAmaternoUsuario,
+                                    GeneroID = sGeneroUsuario,
+                                    FechaNacimiento = iNacimientoUsuario,
+                                    EstatusRegistroID = 1,
+                                    FechaRegistro = DateTime.Now
+                                };
+
+                                var rUsuarioCorporativo = new tblUsuariosCorporativo
+                                {
+                                    UsuarioID = i_UsuarioID,
+                                    CorporativoID = CorporativoID,
+                                };
+
+                                iUsuarioCorporativo.tblUsuarios.Add(dnUsuarioCorporativo);
+                                iUsuarioCorporativo.tblUsuariosCorporativo.Add(rUsuarioCorporativo);
+                                iUsuarioCorporativo.SaveChanges();
+                                break;
                         }
-
-                        var i_registro = new IntelimundoERPEntities();
-
-                        var dn_usr = new tblUsuarios
-                        {
-                            UsuarioID = i_UsuarioID,
-                            TipoUsuarioID = i_TipoUsuarioID,
-                            PerfilID = i_PerfilUsuarioID,
-                            CodigoUsuario = i_CodigoUsuario,
-                            Usuario = i_usuario,
-                            Clave = i_clave,
-                            nombres = Nombre,
-                            apaterno = Apaterno,
-                            amaterno = Amaterno,
-                            EstatusRegistroID = 1,
-                            FechaRegistro = DateTime.Now
-                        };
-
-                        var dn_usremp = new tblUsuariosEmpresa
-                        {
-                            UsuarioID = i_UsuarioID,
-                            EmpresaID = EmpresaID,
-                        };
-
-                        i_registro.tblUsuarios.Add(dn_usr);
-                        i_registro.tblUsuariosEmpresa.Add(dn_usremp);
-                        i_registro.SaveChanges();
-                        break;
-                    case 3:
-                        using (IntelimundoERPEntities mEmpresa = new IntelimundoERPEntities())
-                        {
-                            var iEmpresa = (from c in mEmpresa.tblCorporativo
-                                            select c).ToList();
-
-                            if (iEmpresa.Count == 0)
-                            {
-                            }
-                            else
-                            {
-                                CorporativoID = iEmpresa[0].CorporativoID;
-                            }
-                        }
-                        var iUsuarioCorporativo = new IntelimundoERPEntities();
-
-                        var dnUsuarioCorporativo = new tblUsuarios
-                        {
-                            UsuarioID = i_UsuarioID,
-                            TipoUsuarioID = i_TipoUsuarioID,
-                            PerfilID = i_PerfilUsuarioID,
-                            CodigoUsuario = i_CodigoUsuario,
-                            Usuario = i_usuario,
-                            Clave = i_clave,
-                            nombres = Nombre,
-                            apaterno = Apaterno,
-                            amaterno = Amaterno,
-                            EstatusRegistroID = 1,
-                            FechaRegistro = DateTime.Now
-                        };
-
-                        var rUsuarioCorporativo = new tbl_UsuariosCorporativo
-                        {
-                            UsuarioID = i_UsuarioID,
-                            CorporativoID = CorporativoID,
-                        };
-
-                        iUsuarioCorporativo.tblUsuarios.Add(dnUsuarioCorporativo);
-                        iUsuarioCorporativo.tbl_UsuariosCorporativo.Add(rUsuarioCorporativo);
-                        iUsuarioCorporativo.SaveChanges();
-                        break;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
+
+          
 
 
                 return true;

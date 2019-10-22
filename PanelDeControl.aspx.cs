@@ -76,7 +76,7 @@ namespace IntelimundoERP
                     case 3:
 
                         var iUsuarioCorp = (from a in mUsuario.tblUsuarios
-                                            join b in mUsuario.tbl_UsuariosCorporativo on a.UsuarioID equals b.UsuarioID
+                                            join b in mUsuario.tblUsuariosCorporativo on a.UsuarioID equals b.UsuarioID
                                             join c in mUsuario.tblCorporativo on b.CorporativoID equals c.CorporativoID
                                             where a.UsuarioID == usr_ID
                                             select new
@@ -206,7 +206,7 @@ namespace IntelimundoERP
             strCalleNumeroCorporativo = CICalleNum.ToTitleCase(striCalleNumeroCorporativo.ToLower());
 
             ControlEmpresa.AltaEmpresa(strNombreEmpresa, sTipoRFCEmpresa, striRFCEmpresa, striEmailEmpresa, striTelefonoEmpresa, striCalleNumeroEmpresa, striCodigoPostalEmpresa, sColoniaEmpresa);
-            ControlUsuarios.AltaUsuario(2, 2, strNombreDirector, strApaternoDirector, strAmaternoDirector);
+            //ControlUsuarios.AltaUsuario(2, 2, strNombreDirector, strApaternoDirector, strAmaternoDirector);
 
             if (ControlCorporativo.AltaCorporativo(strNombreCorporativo, striEmailCorporativo, striTelefonoCorporativo, striCalleNumeroCorporativo, striCodigoPostalCorporativo, sColoniaCorporativo))
 
@@ -735,16 +735,16 @@ namespace IntelimundoERP
 
             int sPerfilUsuario = int.Parse(Request.Form["sPerfilUsuario"]);
 
-            if (ControlUsuarios.AltaUsuario(3, sPerfilUsuario, strNombreUsuario, strApaternoUsuario, strAmaternoUsuario))
+            //if (ControlUsuarios.AltaUsuario(3, sPerfilUsuario, strNombreUsuario, strApaternoUsuario, strAmaternoUsuario))
 
-            {
-                limpiaRegistroUsuario();
-                Mensaje("Datos guardados con éxito, favor de revisar su correo donde se le enviaran las credenciales de acceso, revisar su bandeja de spam");
-            }
-            else
-            {
-                Mensaje("Error.");
-            }
+            //{
+            //    limpiaRegistroUsuario();
+            //    Mensaje("Datos guardados con éxito, favor de revisar su correo donde se le enviaran las credenciales de acceso, revisar su bandeja de spam");
+            //}
+            //else
+            //{
+            //    Mensaje("Error.");
+            //}
         }
 
         protected void lkbControlCentros_Click(object sender, EventArgs e)

@@ -12,18 +12,15 @@ namespace IntelimundoERP
     using System;
     using System.Collections.Generic;
     
-    public partial class tblNotificacion
+    public partial class tblEgresos
     {
-        public System.Guid NotificacionID { get; set; }
-        public string email { get; set; }
-        public string Usuario { get; set; }
-        public string Clave { get; set; }
-        public string Asunto { get; set; }
-        public string SMTP { get; set; }
-        public Nullable<int> Puerto { get; set; }
+        public System.Guid EgresosID { get; set; }
+        public string Descripcion { get; set; }
+        public string Caracteristica { get; set; }
+        public Nullable<decimal> Costo { get; set; }
         public Nullable<int> EstatusRegistroID { get; set; }
         public Nullable<System.DateTime> FechaRegistro { get; set; }
-        public Nullable<System.Guid> CorporativoID { get; set; }
+        public System.Guid CorporativoID { get; set; }
     
         public virtual tblCorporativo tblCorporativo { get; set; }
     }

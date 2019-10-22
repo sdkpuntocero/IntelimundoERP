@@ -23,6 +23,21 @@
           <Property Name="Descripcion" Type="varchar" MaxLength="50" />
           <Property Name="CentroID" Type="uniqueidentifier" />
         </EntityType>
+        <EntityType Name="catBusquedaUsuario">
+          <Key>
+            <PropertyRef Name="BusquedaUsuarioID" />
+          </Key>
+          <Property Name="BusquedaUsuarioID" Type="int" Nullable="false" />
+          <Property Name="BusquedaUsuario" Type="varchar" MaxLength="50" />
+          <Property Name="CorporativoID" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="catEstatusRegistro">
+          <Key>
+            <PropertyRef Name="EstatusRegistroID" />
+          </Key>
+          <Property Name="EstatusRegistroID" Type="int" Nullable="false" />
+          <Property Name="EstatusRegistro" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="catGenero">
           <Key>
             <PropertyRef Name="GeneroID" />
@@ -36,6 +51,8 @@
           </Key>
           <Property Name="LicenciaID" Type="int" Nullable="false" />
           <Property Name="Descripcion" Type="varchar" MaxLength="50" />
+          <Property Name="Caracteristicas" Type="varchar(max)" />
+          <Property Name="Precio" Type="money" />
         </EntityType>
         <EntityType Name="catPerfil">
           <Key>
@@ -65,14 +82,6 @@
           <Property Name="TipoUsuarioID" Type="int" Nullable="false" />
           <Property Name="Descripcion" Type="varchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="tbl_UsuariosCorporativo">
-          <Key>
-            <PropertyRef Name="UsuariosCorporativoID" />
-          </Key>
-          <Property Name="UsuariosCorporativoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UsuarioID" Type="uniqueidentifier" />
-          <Property Name="CorporativoID" Type="uniqueidentifier" Nullable="false" />
-        </EntityType>
         <EntityType Name="tblAreasPerfil">
           <Key>
             <PropertyRef Name="AreasPerfilID" />
@@ -99,6 +108,16 @@
           <Property Name="FechaRegistro" Type="date" />
           <Property Name="CorporativoID" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
+        <EntityType Name="tblControlLicencias">
+          <Key>
+            <PropertyRef Name="ControlLicenciasID" />
+          </Key>
+          <Property Name="ControlLicenciasID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LicenciaID" Type="int" />
+          <Property Name="CentroID" Type="uniqueidentifier" />
+          <Property Name="EstatusRegistroID" Type="int" />
+          <Property Name="FechaRegistro" Type="date" />
+        </EntityType>
         <EntityType Name="tblCorporativo">
           <Key>
             <PropertyRef Name="CorporativoID" />
@@ -113,6 +132,18 @@
           <Property Name="EstatusRegistroID" Type="int" />
           <Property Name="FechaRegistro" Type="date" />
           <Property Name="EmpresaID" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="tblEgresos">
+          <Key>
+            <PropertyRef Name="EgresosID" />
+          </Key>
+          <Property Name="EgresosID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="350" />
+          <Property Name="Caracteristica" Type="varchar" MaxLength="350" />
+          <Property Name="Costo" Type="money" />
+          <Property Name="EstatusRegistroID" Type="int" />
+          <Property Name="FechaRegistro" Type="date" />
+          <Property Name="CorporativoID" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="tblEmpresa">
           <Key>
@@ -156,7 +187,6 @@
             <PropertyRef Name="NotificacionID" />
           </Key>
           <Property Name="NotificacionID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Notificacion" Type="int" />
           <Property Name="email" Type="varchar" MaxLength="50" />
           <Property Name="Usuario" Type="varchar" MaxLength="50" />
           <Property Name="Clave" Type="varchar" MaxLength="50" />
@@ -196,8 +226,17 @@
           <Property Name="apaterno" Type="varchar" MaxLength="50" />
           <Property Name="amaterno" Type="varchar" MaxLength="50" />
           <Property Name="GeneroID" Type="int" />
+          <Property Name="FechaNacimiento" Type="date" />
           <Property Name="EstatusRegistroID" Type="int" />
           <Property Name="FechaRegistro" Type="date" />
+        </EntityType>
+        <EntityType Name="tblUsuariosCorporativo">
+          <Key>
+            <PropertyRef Name="UsuariosCorporativoID" />
+          </Key>
+          <Property Name="UsuariosCorporativoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UsuarioID" Type="uniqueidentifier" />
+          <Property Name="CorporativoID" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="tblUsuariosEmpresa">
           <Key>
@@ -231,6 +270,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_catBusquedaUsuario_tblCorporativo">
+          <End Role="tblCorporativo" Type="Self.tblCorporativo" Multiplicity="0..1" />
+          <End Role="catBusquedaUsuario" Type="Self.catBusquedaUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCorporativo">
+              <PropertyRef Name="CorporativoID" />
+            </Principal>
+            <Dependent Role="catBusquedaUsuario">
+              <PropertyRef Name="CorporativoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Corporativo_Empresa">
           <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="0..1" />
           <End Role="tblCorporativo" Type="Self.tblCorporativo" Multiplicity="*" />
@@ -245,24 +296,24 @@
         </Association>
         <Association Name="FK_tbl_UsuariosCorporativo_tblCorporativo">
           <End Role="tblCorporativo" Type="Self.tblCorporativo" Multiplicity="1" />
-          <End Role="tbl_UsuariosCorporativo" Type="Self.tbl_UsuariosCorporativo" Multiplicity="*" />
+          <End Role="tblUsuariosCorporativo" Type="Self.tblUsuariosCorporativo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblCorporativo">
               <PropertyRef Name="CorporativoID" />
             </Principal>
-            <Dependent Role="tbl_UsuariosCorporativo">
+            <Dependent Role="tblUsuariosCorporativo">
               <PropertyRef Name="CorporativoID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_tbl_UsuariosCorporativo_tblUsuarios">
           <End Role="tblUsuarios" Type="Self.tblUsuarios" Multiplicity="0..1" />
-          <End Role="tbl_UsuariosCorporativo" Type="Self.tbl_UsuariosCorporativo" Multiplicity="*" />
+          <End Role="tblUsuariosCorporativo" Type="Self.tblUsuariosCorporativo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblUsuarios">
               <PropertyRef Name="UsuarioID" />
             </Principal>
-            <Dependent Role="tbl_UsuariosCorporativo">
+            <Dependent Role="tblUsuariosCorporativo">
               <PropertyRef Name="UsuarioID" />
             </Dependent>
           </ReferentialConstraint>
@@ -327,6 +378,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblEgresos_tblCorporativo">
+          <End Role="tblCorporativo" Type="Self.tblCorporativo" Multiplicity="1" />
+          <End Role="tblEgresos" Type="Self.tblEgresos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCorporativo">
+              <PropertyRef Name="CorporativoID" />
+            </Principal>
+            <Dependent Role="tblEgresos">
+              <PropertyRef Name="CorporativoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblEmpresa_CatTipoRFC">
           <End Role="CatTipoRFC" Type="Self.CatTipoRFC" Multiplicity="0..1" />
           <End Role="tblEmpresa" Type="Self.tblEmpresa" Multiplicity="*" />
@@ -360,6 +423,18 @@
             </Principal>
             <Dependent Role="tblServicios">
               <PropertyRef Name="CorporativoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblUsuarios_catEstatusRegistro">
+          <End Role="catEstatusRegistro" Type="Self.catEstatusRegistro" Multiplicity="0..1" />
+          <End Role="tblUsuarios" Type="Self.tblUsuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catEstatusRegistro">
+              <PropertyRef Name="EstatusRegistroID" />
+            </Principal>
+            <Dependent Role="tblUsuarios">
+              <PropertyRef Name="EstatusRegistroID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -414,21 +489,25 @@
         <EntityContainer Name="IntelimundoERPModelStoreContainer">
           <EntitySet Name="catAreas" EntityType="Self.catAreas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="catBusquedaCentro" EntityType="Self.catBusquedaCentro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="catBusquedaUsuario" EntityType="Self.catBusquedaUsuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="catEstatusRegistro" EntityType="Self.catEstatusRegistro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="catGenero" EntityType="Self.catGenero" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="catLicencia" EntityType="Self.catLicencia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="catPerfil" EntityType="Self.catPerfil" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="catTipoCentro" EntityType="Self.catTipoCentro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CatTipoRFC" EntityType="Self.CatTipoRFC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="catTipoUsuario" EntityType="Self.catTipoUsuario" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tbl_UsuariosCorporativo" EntityType="Self.tbl_UsuariosCorporativo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblAreasPerfil" EntityType="Self.tblAreasPerfil" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCentro" EntityType="Self.tblCentro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblControlLicencias" EntityType="Self.tblControlLicencias" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCorporativo" EntityType="Self.tblCorporativo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblEgresos" EntityType="Self.tblEgresos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblEmpresa" EntityType="Self.tblEmpresa" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblMexCP" EntityType="Self.tblMexCP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblNotificacion" EntityType="Self.tblNotificacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblServicios" EntityType="Self.tblServicios" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblUsuarios" EntityType="Self.tblUsuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUsuariosCorporativo" EntityType="Self.tblUsuariosCorporativo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblUsuariosEmpresa" EntityType="Self.tblUsuariosEmpresa" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_catAreas_tblCorporativo" Association="Self.FK_catAreas_tblCorporativo">
             <End Role="tblCorporativo" EntitySet="tblCorporativo" />
@@ -438,17 +517,21 @@
             <End Role="tblCentro" EntitySet="tblCentro" />
             <End Role="catBusquedaCentro" EntitySet="catBusquedaCentro" />
           </AssociationSet>
+          <AssociationSet Name="FK_catBusquedaUsuario_tblCorporativo" Association="Self.FK_catBusquedaUsuario_tblCorporativo">
+            <End Role="tblCorporativo" EntitySet="tblCorporativo" />
+            <End Role="catBusquedaUsuario" EntitySet="catBusquedaUsuario" />
+          </AssociationSet>
           <AssociationSet Name="FK_Corporativo_Empresa" Association="Self.FK_Corporativo_Empresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblCorporativo" EntitySet="tblCorporativo" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_UsuariosCorporativo_tblCorporativo" Association="Self.FK_tbl_UsuariosCorporativo_tblCorporativo">
             <End Role="tblCorporativo" EntitySet="tblCorporativo" />
-            <End Role="tbl_UsuariosCorporativo" EntitySet="tbl_UsuariosCorporativo" />
+            <End Role="tblUsuariosCorporativo" EntitySet="tblUsuariosCorporativo" />
           </AssociationSet>
           <AssociationSet Name="FK_tbl_UsuariosCorporativo_tblUsuarios" Association="Self.FK_tbl_UsuariosCorporativo_tblUsuarios">
             <End Role="tblUsuarios" EntitySet="tblUsuarios" />
-            <End Role="tbl_UsuariosCorporativo" EntitySet="tbl_UsuariosCorporativo" />
+            <End Role="tblUsuariosCorporativo" EntitySet="tblUsuariosCorporativo" />
           </AssociationSet>
           <AssociationSet Name="FK_tblAreasPerfil_catAreas" Association="Self.FK_tblAreasPerfil_catAreas">
             <End Role="catAreas" EntitySet="catAreas" />
@@ -470,6 +553,10 @@
             <End Role="tblCorporativo" EntitySet="tblCorporativo" />
             <End Role="tblCentro" EntitySet="tblCentro" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblEgresos_tblCorporativo" Association="Self.FK_tblEgresos_tblCorporativo">
+            <End Role="tblCorporativo" EntitySet="tblCorporativo" />
+            <End Role="tblEgresos" EntitySet="tblEgresos" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblEmpresa_CatTipoRFC" Association="Self.FK_tblEmpresa_CatTipoRFC">
             <End Role="CatTipoRFC" EntitySet="CatTipoRFC" />
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
@@ -481,6 +568,10 @@
           <AssociationSet Name="FK_tblServicios_tblCorporativo" Association="Self.FK_tblServicios_tblCorporativo">
             <End Role="tblCorporativo" EntitySet="tblCorporativo" />
             <End Role="tblServicios" EntitySet="tblServicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblUsuarios_catEstatusRegistro" Association="Self.FK_tblUsuarios_catEstatusRegistro">
+            <End Role="catEstatusRegistro" EntitySet="catEstatusRegistro" />
+            <End Role="tblUsuarios" EntitySet="tblUsuarios" />
           </AssociationSet>
           <AssociationSet Name="FK_tblUsuarios_catGenero" Association="Self.FK_tblUsuarios_catGenero">
             <End Role="catGenero" EntitySet="catGenero" />
@@ -512,15 +603,17 @@
           <EntitySet Name="catTipoCentro" EntityType="IntelimundoERPModel.catTipoCentro" />
           <EntitySet Name="CatTipoRFC" EntityType="IntelimundoERPModel.CatTipoRFC" />
           <EntitySet Name="catTipoUsuario" EntityType="IntelimundoERPModel.catTipoUsuario" />
-          <EntitySet Name="tbl_UsuariosCorporativo" EntityType="IntelimundoERPModel.tbl_UsuariosCorporativo" />
           <EntitySet Name="tblAreasPerfil" EntityType="IntelimundoERPModel.tblAreasPerfil" />
           <EntitySet Name="tblCentro" EntityType="IntelimundoERPModel.tblCentro" />
+          <EntitySet Name="tblControlLicencias" EntityType="IntelimundoERPModel.tblControlLicencias" />
           <EntitySet Name="tblCorporativo" EntityType="IntelimundoERPModel.tblCorporativo" />
+          <EntitySet Name="tblEgresos" EntityType="IntelimundoERPModel.tblEgresos" />
           <EntitySet Name="tblEmpresa" EntityType="IntelimundoERPModel.tblEmpresa" />
           <EntitySet Name="tblMexCP" EntityType="IntelimundoERPModel.tblMexCP" />
           <EntitySet Name="tblNotificacion" EntityType="IntelimundoERPModel.tblNotificacion" />
           <EntitySet Name="tblServicios" EntityType="IntelimundoERPModel.tblServicios" />
           <EntitySet Name="tblUsuarios" EntityType="IntelimundoERPModel.tblUsuarios" />
+          <EntitySet Name="tblUsuariosCorporativo" EntityType="IntelimundoERPModel.tblUsuariosCorporativo" />
           <EntitySet Name="tblUsuariosEmpresa" EntityType="IntelimundoERPModel.tblUsuariosEmpresa" />
           <AssociationSet Name="FK_catAreas_tblCorporativo" Association="IntelimundoERPModel.FK_catAreas_tblCorporativo">
             <End Role="tblCorporativo" EntitySet="tblCorporativo" />
@@ -558,14 +651,6 @@
             <End Role="catTipoUsuario" EntitySet="catTipoUsuario" />
             <End Role="tblUsuarios" EntitySet="tblUsuarios" />
           </AssociationSet>
-          <AssociationSet Name="FK_tbl_UsuariosCorporativo_tblCorporativo" Association="IntelimundoERPModel.FK_tbl_UsuariosCorporativo_tblCorporativo">
-            <End Role="tblCorporativo" EntitySet="tblCorporativo" />
-            <End Role="tbl_UsuariosCorporativo" EntitySet="tbl_UsuariosCorporativo" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tbl_UsuariosCorporativo_tblUsuarios" Association="IntelimundoERPModel.FK_tbl_UsuariosCorporativo_tblUsuarios">
-            <End Role="tblUsuarios" EntitySet="tblUsuarios" />
-            <End Role="tbl_UsuariosCorporativo" EntitySet="tbl_UsuariosCorporativo" />
-          </AssociationSet>
           <AssociationSet Name="FK_tblCentro_tblCorporativo" Association="IntelimundoERPModel.FK_tblCentro_tblCorporativo">
             <End Role="tblCorporativo" EntitySet="tblCorporativo" />
             <End Role="tblCentro" EntitySet="tblCentro" />
@@ -573,6 +658,14 @@
           <AssociationSet Name="FK_Corporativo_Empresa" Association="IntelimundoERPModel.FK_Corporativo_Empresa">
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblCorporativo" EntitySet="tblCorporativo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_UsuariosCorporativo_tblCorporativo" Association="IntelimundoERPModel.FK_tbl_UsuariosCorporativo_tblCorporativo">
+            <End Role="tblCorporativo" EntitySet="tblCorporativo" />
+            <End Role="tblUsuariosCorporativo" EntitySet="tblUsuariosCorporativo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblEgresos_tblCorporativo" Association="IntelimundoERPModel.FK_tblEgresos_tblCorporativo">
+            <End Role="tblCorporativo" EntitySet="tblCorporativo" />
+            <End Role="tblEgresos" EntitySet="tblEgresos" />
           </AssociationSet>
           <AssociationSet Name="FK_tblNotificacion_tblCorporativo" Association="IntelimundoERPModel.FK_tblNotificacion_tblCorporativo">
             <End Role="tblCorporativo" EntitySet="tblCorporativo" />
@@ -586,9 +679,23 @@
             <End Role="tblEmpresa" EntitySet="tblEmpresa" />
             <End Role="tblUsuariosEmpresa" EntitySet="tblUsuariosEmpresa" />
           </AssociationSet>
+          <AssociationSet Name="FK_tbl_UsuariosCorporativo_tblUsuarios" Association="IntelimundoERPModel.FK_tbl_UsuariosCorporativo_tblUsuarios">
+            <End Role="tblUsuarios" EntitySet="tblUsuarios" />
+            <End Role="tblUsuariosCorporativo" EntitySet="tblUsuariosCorporativo" />
+          </AssociationSet>
           <AssociationSet Name="FK_UsuariosEmpresa_tblUsuarios" Association="IntelimundoERPModel.FK_UsuariosEmpresa_tblUsuarios">
             <End Role="tblUsuarios" EntitySet="tblUsuarios" />
             <End Role="tblUsuariosEmpresa" EntitySet="tblUsuariosEmpresa" />
+          </AssociationSet>
+          <EntitySet Name="catBusquedaUsuario" EntityType="IntelimundoERPModel.catBusquedaUsuario" />
+          <AssociationSet Name="FK_catBusquedaUsuario_tblCorporativo" Association="IntelimundoERPModel.FK_catBusquedaUsuario_tblCorporativo">
+            <End Role="tblCorporativo" EntitySet="tblCorporativo" />
+            <End Role="catBusquedaUsuario" EntitySet="catBusquedaUsuario" />
+          </AssociationSet>
+          <EntitySet Name="catEstatusRegistro" EntityType="IntelimundoERPModel.catEstatusRegistro" />
+          <AssociationSet Name="FK_tblUsuarios_catEstatusRegistro" Association="IntelimundoERPModel.FK_tblUsuarios_catEstatusRegistro">
+            <End Role="catEstatusRegistro" EntitySet="catEstatusRegistro" />
+            <End Role="tblUsuarios" EntitySet="tblUsuarios" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="catAreas">
@@ -626,6 +733,8 @@
           </Key>
           <Property Name="LicenciaID" Type="Int32" Nullable="false" />
           <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Caracteristicas" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Precio" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="tblCentro" Relationship="IntelimundoERPModel.FK_tblCentro_catLicencia" FromRole="catLicencia" ToRole="tblCentro" />
         </EntityType>
         <EntityType Name="catPerfil">
@@ -660,16 +769,6 @@
           <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="tblUsuarios" Relationship="IntelimundoERPModel.FK_tblUsuarios_catTipoUsuario" FromRole="catTipoUsuario" ToRole="tblUsuarios" />
         </EntityType>
-        <EntityType Name="tbl_UsuariosCorporativo">
-          <Key>
-            <PropertyRef Name="UsuariosCorporativoID" />
-          </Key>
-          <Property Name="UsuariosCorporativoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UsuarioID" Type="Guid" />
-          <Property Name="CorporativoID" Type="Guid" Nullable="false" />
-          <NavigationProperty Name="tblCorporativo" Relationship="IntelimundoERPModel.FK_tbl_UsuariosCorporativo_tblCorporativo" FromRole="tbl_UsuariosCorporativo" ToRole="tblCorporativo" />
-          <NavigationProperty Name="tblUsuarios" Relationship="IntelimundoERPModel.FK_tbl_UsuariosCorporativo_tblUsuarios" FromRole="tbl_UsuariosCorporativo" ToRole="tblUsuarios" />
-        </EntityType>
         <EntityType Name="tblAreasPerfil">
           <Key>
             <PropertyRef Name="AreasPerfilID" />
@@ -702,6 +801,16 @@
           <NavigationProperty Name="catTipoCentro" Relationship="IntelimundoERPModel.FK_tblCentro_catTipoCentro" FromRole="tblCentro" ToRole="catTipoCentro" />
           <NavigationProperty Name="tblCorporativo" Relationship="IntelimundoERPModel.FK_tblCentro_tblCorporativo" FromRole="tblCentro" ToRole="tblCorporativo" />
         </EntityType>
+        <EntityType Name="tblControlLicencias">
+          <Key>
+            <PropertyRef Name="ControlLicenciasID" />
+          </Key>
+          <Property Name="ControlLicenciasID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LicenciaID" Type="Int32" />
+          <Property Name="CentroID" Type="Guid" />
+          <Property Name="EstatusRegistroID" Type="Int32" />
+          <Property Name="FechaRegistro" Type="DateTime" Precision="0" />
+        </EntityType>
         <EntityType Name="tblCorporativo">
           <Key>
             <PropertyRef Name="CorporativoID" />
@@ -717,11 +826,26 @@
           <Property Name="FechaRegistro" Type="DateTime" Precision="0" />
           <Property Name="EmpresaID" Type="Guid" />
           <NavigationProperty Name="catAreas" Relationship="IntelimundoERPModel.FK_catAreas_tblCorporativo" FromRole="tblCorporativo" ToRole="catAreas" />
-          <NavigationProperty Name="tbl_UsuariosCorporativo" Relationship="IntelimundoERPModel.FK_tbl_UsuariosCorporativo_tblCorporativo" FromRole="tblCorporativo" ToRole="tbl_UsuariosCorporativo" />
           <NavigationProperty Name="tblCentro" Relationship="IntelimundoERPModel.FK_tblCentro_tblCorporativo" FromRole="tblCorporativo" ToRole="tblCentro" />
           <NavigationProperty Name="tblEmpresa" Relationship="IntelimundoERPModel.FK_Corporativo_Empresa" FromRole="tblCorporativo" ToRole="tblEmpresa" />
+          <NavigationProperty Name="tblUsuariosCorporativo" Relationship="IntelimundoERPModel.FK_tbl_UsuariosCorporativo_tblCorporativo" FromRole="tblCorporativo" ToRole="tblUsuariosCorporativo" />
+          <NavigationProperty Name="tblEgresos" Relationship="IntelimundoERPModel.FK_tblEgresos_tblCorporativo" FromRole="tblCorporativo" ToRole="tblEgresos" />
           <NavigationProperty Name="tblNotificacion" Relationship="IntelimundoERPModel.FK_tblNotificacion_tblCorporativo" FromRole="tblCorporativo" ToRole="tblNotificacion" />
           <NavigationProperty Name="tblServicios" Relationship="IntelimundoERPModel.FK_tblServicios_tblCorporativo" FromRole="tblCorporativo" ToRole="tblServicios" />
+          <NavigationProperty Name="catBusquedaUsuario" Relationship="IntelimundoERPModel.FK_catBusquedaUsuario_tblCorporativo" FromRole="tblCorporativo" ToRole="catBusquedaUsuario" />
+        </EntityType>
+        <EntityType Name="tblEgresos">
+          <Key>
+            <PropertyRef Name="EgresosID" />
+          </Key>
+          <Property Name="EgresosID" Type="Guid" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="350" FixedLength="false" Unicode="false" />
+          <Property Name="Caracteristica" Type="String" MaxLength="350" FixedLength="false" Unicode="false" />
+          <Property Name="Costo" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="EstatusRegistroID" Type="Int32" />
+          <Property Name="FechaRegistro" Type="DateTime" Precision="0" />
+          <Property Name="CorporativoID" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="tblCorporativo" Relationship="IntelimundoERPModel.FK_tblEgresos_tblCorporativo" FromRole="tblEgresos" ToRole="tblCorporativo" />
         </EntityType>
         <EntityType Name="tblEmpresa">
           <Key>
@@ -768,7 +892,6 @@
             <PropertyRef Name="NotificacionID" />
           </Key>
           <Property Name="NotificacionID" Type="Guid" Nullable="false" />
-          <Property Name="Notificacion" Type="Int32" />
           <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Clave" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -810,12 +933,24 @@
           <Property Name="apaterno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="amaterno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="GeneroID" Type="Int32" />
+          <Property Name="FechaNacimiento" Type="DateTime" Precision="0" />
           <Property Name="EstatusRegistroID" Type="Int32" />
           <Property Name="FechaRegistro" Type="DateTime" Precision="0" />
           <NavigationProperty Name="catGenero" Relationship="IntelimundoERPModel.FK_tblUsuarios_catGenero" FromRole="tblUsuarios" ToRole="catGenero" />
           <NavigationProperty Name="catTipoUsuario" Relationship="IntelimundoERPModel.FK_tblUsuarios_catTipoUsuario" FromRole="tblUsuarios" ToRole="catTipoUsuario" />
-          <NavigationProperty Name="tbl_UsuariosCorporativo" Relationship="IntelimundoERPModel.FK_tbl_UsuariosCorporativo_tblUsuarios" FromRole="tblUsuarios" ToRole="tbl_UsuariosCorporativo" />
+          <NavigationProperty Name="tblUsuariosCorporativo" Relationship="IntelimundoERPModel.FK_tbl_UsuariosCorporativo_tblUsuarios" FromRole="tblUsuarios" ToRole="tblUsuariosCorporativo" />
           <NavigationProperty Name="tblUsuariosEmpresa" Relationship="IntelimundoERPModel.FK_UsuariosEmpresa_tblUsuarios" FromRole="tblUsuarios" ToRole="tblUsuariosEmpresa" />
+          <NavigationProperty Name="catEstatusRegistro" Relationship="IntelimundoERPModel.FK_tblUsuarios_catEstatusRegistro" FromRole="tblUsuarios" ToRole="catEstatusRegistro" />
+        </EntityType>
+        <EntityType Name="tblUsuariosCorporativo">
+          <Key>
+            <PropertyRef Name="UsuariosCorporativoID" />
+          </Key>
+          <Property Name="UsuariosCorporativoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UsuarioID" Type="Guid" />
+          <Property Name="CorporativoID" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="tblCorporativo" Relationship="IntelimundoERPModel.FK_tbl_UsuariosCorporativo_tblCorporativo" FromRole="tblUsuariosCorporativo" ToRole="tblCorporativo" />
+          <NavigationProperty Name="tblUsuarios" Relationship="IntelimundoERPModel.FK_tbl_UsuariosCorporativo_tblUsuarios" FromRole="tblUsuariosCorporativo" ToRole="tblUsuarios" />
         </EntityType>
         <EntityType Name="tblUsuariosEmpresa">
           <Key>
@@ -935,30 +1070,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tbl_UsuariosCorporativo_tblCorporativo">
-          <End Type="IntelimundoERPModel.tblCorporativo" Role="tblCorporativo" Multiplicity="1" />
-          <End Type="IntelimundoERPModel.tbl_UsuariosCorporativo" Role="tbl_UsuariosCorporativo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblCorporativo">
-              <PropertyRef Name="CorporativoID" />
-            </Principal>
-            <Dependent Role="tbl_UsuariosCorporativo">
-              <PropertyRef Name="CorporativoID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tbl_UsuariosCorporativo_tblUsuarios">
-          <End Type="IntelimundoERPModel.tblUsuarios" Role="tblUsuarios" Multiplicity="0..1" />
-          <End Type="IntelimundoERPModel.tbl_UsuariosCorporativo" Role="tbl_UsuariosCorporativo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblUsuarios">
-              <PropertyRef Name="UsuarioID" />
-            </Principal>
-            <Dependent Role="tbl_UsuariosCorporativo">
-              <PropertyRef Name="UsuarioID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblCentro_tblCorporativo">
           <End Type="IntelimundoERPModel.tblCorporativo" Role="tblCorporativo" Multiplicity="1" />
           <End Type="IntelimundoERPModel.tblCentro" Role="tblCentro" Multiplicity="*" />
@@ -980,6 +1091,30 @@
             </Principal>
             <Dependent Role="tblCorporativo">
               <PropertyRef Name="EmpresaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_UsuariosCorporativo_tblCorporativo">
+          <End Type="IntelimundoERPModel.tblCorporativo" Role="tblCorporativo" Multiplicity="1" />
+          <End Type="IntelimundoERPModel.tblUsuariosCorporativo" Role="tblUsuariosCorporativo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCorporativo">
+              <PropertyRef Name="CorporativoID" />
+            </Principal>
+            <Dependent Role="tblUsuariosCorporativo">
+              <PropertyRef Name="CorporativoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblEgresos_tblCorporativo">
+          <End Type="IntelimundoERPModel.tblCorporativo" Role="tblCorporativo" Multiplicity="1" />
+          <End Type="IntelimundoERPModel.tblEgresos" Role="tblEgresos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCorporativo">
+              <PropertyRef Name="CorporativoID" />
+            </Principal>
+            <Dependent Role="tblEgresos">
+              <PropertyRef Name="CorporativoID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1019,6 +1154,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tbl_UsuariosCorporativo_tblUsuarios">
+          <End Type="IntelimundoERPModel.tblUsuarios" Role="tblUsuarios" Multiplicity="0..1" />
+          <End Type="IntelimundoERPModel.tblUsuariosCorporativo" Role="tblUsuariosCorporativo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUsuarios">
+              <PropertyRef Name="UsuarioID" />
+            </Principal>
+            <Dependent Role="tblUsuariosCorporativo">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UsuariosEmpresa_tblUsuarios">
           <End Type="IntelimundoERPModel.tblUsuarios" Role="tblUsuarios" Multiplicity="0..1" />
           <End Type="IntelimundoERPModel.tblUsuariosEmpresa" Role="tblUsuariosEmpresa" Multiplicity="*" />
@@ -1028,6 +1175,47 @@
             </Principal>
             <Dependent Role="tblUsuariosEmpresa">
               <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="catBusquedaUsuario">
+          <Key>
+            <PropertyRef Name="BusquedaUsuarioID" />
+          </Key>
+          <Property Name="BusquedaUsuarioID" Type="Int32" Nullable="false" />
+          <Property Name="BusquedaUsuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CorporativoID" Type="Guid" />
+          <NavigationProperty Name="tblCorporativo" Relationship="IntelimundoERPModel.FK_catBusquedaUsuario_tblCorporativo" FromRole="catBusquedaUsuario" ToRole="tblCorporativo" />
+        </EntityType>
+        <Association Name="FK_catBusquedaUsuario_tblCorporativo">
+          <End Type="IntelimundoERPModel.tblCorporativo" Role="tblCorporativo" Multiplicity="0..1" />
+          <End Type="IntelimundoERPModel.catBusquedaUsuario" Role="catBusquedaUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCorporativo">
+              <PropertyRef Name="CorporativoID" />
+            </Principal>
+            <Dependent Role="catBusquedaUsuario">
+              <PropertyRef Name="CorporativoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="catEstatusRegistro">
+          <Key>
+            <PropertyRef Name="EstatusRegistroID" />
+          </Key>
+          <Property Name="EstatusRegistroID" Type="Int32" Nullable="false" />
+          <Property Name="EstatusRegistro" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblUsuarios" Relationship="IntelimundoERPModel.FK_tblUsuarios_catEstatusRegistro" FromRole="catEstatusRegistro" ToRole="tblUsuarios" />
+        </EntityType>
+        <Association Name="FK_tblUsuarios_catEstatusRegistro">
+          <End Type="IntelimundoERPModel.catEstatusRegistro" Role="catEstatusRegistro" Multiplicity="0..1" />
+          <End Type="IntelimundoERPModel.tblUsuarios" Role="tblUsuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="catEstatusRegistro">
+              <PropertyRef Name="EstatusRegistroID" />
+            </Principal>
+            <Dependent Role="tblUsuarios">
+              <PropertyRef Name="EstatusRegistroID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1068,6 +1256,8 @@
           <EntitySetMapping Name="catLicencia">
             <EntityTypeMapping TypeName="IntelimundoERPModel.catLicencia">
               <MappingFragment StoreEntitySet="catLicencia">
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="Caracteristicas" ColumnName="Caracteristicas" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="LicenciaID" ColumnName="LicenciaID" />
               </MappingFragment>
@@ -1105,15 +1295,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tbl_UsuariosCorporativo">
-            <EntityTypeMapping TypeName="IntelimundoERPModel.tbl_UsuariosCorporativo">
-              <MappingFragment StoreEntitySet="tbl_UsuariosCorporativo">
-                <ScalarProperty Name="CorporativoID" ColumnName="CorporativoID" />
-                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
-                <ScalarProperty Name="UsuariosCorporativoID" ColumnName="UsuariosCorporativoID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tblAreasPerfil">
             <EntityTypeMapping TypeName="IntelimundoERPModel.tblAreasPerfil">
               <MappingFragment StoreEntitySet="tblAreasPerfil">
@@ -1142,6 +1323,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tblControlLicencias">
+            <EntityTypeMapping TypeName="IntelimundoERPModel.tblControlLicencias">
+              <MappingFragment StoreEntitySet="tblControlLicencias">
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="EstatusRegistroID" ColumnName="EstatusRegistroID" />
+                <ScalarProperty Name="CentroID" ColumnName="CentroID" />
+                <ScalarProperty Name="LicenciaID" ColumnName="LicenciaID" />
+                <ScalarProperty Name="ControlLicenciasID" ColumnName="ControlLicenciasID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tblCorporativo">
             <EntityTypeMapping TypeName="IntelimundoERPModel.tblCorporativo">
               <MappingFragment StoreEntitySet="tblCorporativo">
@@ -1155,6 +1347,19 @@
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="CorporativoID" ColumnName="CorporativoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblEgresos">
+            <EntityTypeMapping TypeName="IntelimundoERPModel.tblEgresos">
+              <MappingFragment StoreEntitySet="tblEgresos">
+                <ScalarProperty Name="CorporativoID" ColumnName="CorporativoID" />
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="EstatusRegistroID" ColumnName="EstatusRegistroID" />
+                <ScalarProperty Name="Costo" ColumnName="Costo" />
+                <ScalarProperty Name="Caracteristica" ColumnName="Caracteristica" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="EgresosID" ColumnName="EgresosID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1208,7 +1413,6 @@
                 <ScalarProperty Name="Clave" ColumnName="Clave" />
                 <ScalarProperty Name="Usuario" ColumnName="Usuario" />
                 <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="Notificacion" ColumnName="Notificacion" />
                 <ScalarProperty Name="NotificacionID" ColumnName="NotificacionID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1234,6 +1438,7 @@
               <MappingFragment StoreEntitySet="tblUsuarios">
                 <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
                 <ScalarProperty Name="EstatusRegistroID" ColumnName="EstatusRegistroID" />
+                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
                 <ScalarProperty Name="GeneroID" ColumnName="GeneroID" />
                 <ScalarProperty Name="amaterno" ColumnName="amaterno" />
                 <ScalarProperty Name="apaterno" ColumnName="apaterno" />
@@ -1247,12 +1452,38 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tblUsuariosCorporativo">
+            <EntityTypeMapping TypeName="IntelimundoERPModel.tblUsuariosCorporativo">
+              <MappingFragment StoreEntitySet="tblUsuariosCorporativo">
+                <ScalarProperty Name="CorporativoID" ColumnName="CorporativoID" />
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+                <ScalarProperty Name="UsuariosCorporativoID" ColumnName="UsuariosCorporativoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tblUsuariosEmpresa">
             <EntityTypeMapping TypeName="IntelimundoERPModel.tblUsuariosEmpresa">
               <MappingFragment StoreEntitySet="tblUsuariosEmpresa">
                 <ScalarProperty Name="EmpresaID" ColumnName="EmpresaID" />
                 <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
                 <ScalarProperty Name="UsuariosEmpresaID" ColumnName="UsuariosEmpresaID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catBusquedaUsuario">
+            <EntityTypeMapping TypeName="IntelimundoERPModel.catBusquedaUsuario">
+              <MappingFragment StoreEntitySet="catBusquedaUsuario">
+                <ScalarProperty Name="CorporativoID" ColumnName="CorporativoID" />
+                <ScalarProperty Name="BusquedaUsuario" ColumnName="BusquedaUsuario" />
+                <ScalarProperty Name="BusquedaUsuarioID" ColumnName="BusquedaUsuarioID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="catEstatusRegistro">
+            <EntityTypeMapping TypeName="IntelimundoERPModel.catEstatusRegistro">
+              <MappingFragment StoreEntitySet="catEstatusRegistro">
+                <ScalarProperty Name="EstatusRegistro" ColumnName="EstatusRegistro" />
+                <ScalarProperty Name="EstatusRegistroID" ColumnName="EstatusRegistroID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

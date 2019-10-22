@@ -633,7 +633,7 @@ namespace IntelimundoERP
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlSelect sBusquedaUsuario;
+        protected global::System.Web.UI.WebControls.DropDownList sBusquedaUsuario;
 
         /// <summary>
         /// Control iUsuarioBuscar.
@@ -699,13 +699,13 @@ namespace IntelimundoERP
         protected global::System.Web.UI.HtmlControls.HtmlSelect sPerfilUsuario;
 
         /// <summary>
-        /// Control SGeneroUsuario.
+        /// Control sGeneroUsuario.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlSelect SGeneroUsuario;
+        protected global::System.Web.UI.HtmlControls.HtmlSelect sGeneroUsuario;
 
         /// <summary>
         /// Control iNacimientoUsuario.

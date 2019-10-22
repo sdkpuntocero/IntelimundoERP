@@ -56,14 +56,14 @@ namespace IntelimundoERP
 
                         UsuarioID = dDirector[0].UsuarioID;
 
-                        var dCorporativoU = new tbl_UsuariosCorporativo
+                        var dCorporativoU = new tblUsuariosCorporativo
                         {
                             CorporativoID = CorporativoID,
                             UsuarioID = UsuarioID
                         };
 
                         i_registro.tblCorporativo.Add(diCorporativo);
-                        i_registro.tbl_UsuariosCorporativo.Add(dCorporativoU);
+                        i_registro.tblUsuariosCorporativo.Add(dCorporativoU);
                         i_registro.SaveChanges();
                     }
                     else

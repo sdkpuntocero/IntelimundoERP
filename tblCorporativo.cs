@@ -18,10 +18,12 @@ namespace IntelimundoERP
         public tblCorporativo()
         {
             this.catAreas = new HashSet<catAreas>();
-            this.tbl_UsuariosCorporativo = new HashSet<tbl_UsuariosCorporativo>();
             this.tblCentro = new HashSet<tblCentro>();
+            this.tblUsuariosCorporativo = new HashSet<tblUsuariosCorporativo>();
+            this.tblEgresos = new HashSet<tblEgresos>();
             this.tblNotificacion = new HashSet<tblNotificacion>();
             this.tblServicios = new HashSet<tblServicios>();
+            this.catBusquedaUsuario = new HashSet<catBusquedaUsuario>();
         }
     
         public System.Guid CorporativoID { get; set; }
@@ -38,13 +40,17 @@ namespace IntelimundoERP
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<catAreas> catAreas { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tbl_UsuariosCorporativo> tbl_UsuariosCorporativo { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblCentro> tblCentro { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblUsuariosCorporativo> tblUsuariosCorporativo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblEgresos> tblEgresos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblNotificacion> tblNotificacion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblServicios> tblServicios { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<catBusquedaUsuario> catBusquedaUsuario { get; set; }
     }
 }

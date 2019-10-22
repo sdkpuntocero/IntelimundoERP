@@ -67,7 +67,7 @@
                     <div class="sidebar-header">
                         <div class="user-pic">
                             <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
-                                alt="User picture">
+                                alt="User picture" />
                         </div>
                         <div class="user-info">
                             <span class="user-name">
@@ -95,7 +95,7 @@
                     <div class="sidebar-search">
                         <div>
                             <div class="input-group">
-                                <input type="text" class="form-control search-menu" placeholder="Search...">
+                                <input type="text" class="form-control search-menu" placeholder="Search..." />
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fa fa-search" aria-hidden="true"></i>
@@ -362,7 +362,6 @@
                                                 </asp:LinkButton>
                                             </span>
                                         </div>
-
                                     </div>
 
                                     <div class="card-body">
@@ -580,25 +579,23 @@
                                         <div class="input-group" runat="server" id="divBuscaUsuario" visible="false">
 
                                             <div class="form-group">
-                                                <select class="form-control" runat="server" id="sBusquedaUsuario" tabindex="3">
-                                                </select>
+                                                <asp:DropDownList CssClass="form-control input-box" ID="sBusquedaUsuario" runat="server" TabIndex="3" required="required" AutoPostBack="true" OnSelectedIndexChanged="sBusquedaUsuario_SelectedIndexChanged"></asp:DropDownList>
                                             </div>
 
-                                            <asp:TextBox CssClass="form-control" ID="iUsuarioBuscar" runat="server" placeholder="*Buscar" TextMode="Search" TabIndex="4"></asp:TextBox>
+                                            <asp:TextBox CssClass="form-control" ID="iUsuarioBuscar" runat="server" placeholder="*Buscar" TextMode="Search" TabIndex="4" onkeyup="this.value = this.value.toUpperCase();" required="required"></asp:TextBox>
 
                                             <ajaxToolkit:AutoCompleteExtender ID="aceUsuarioBuscar" runat="server" ServiceMethod="busca_pnl" MinimumPrefixLength="2" CompletionInterval="100" EnableCaching="true" CompletionSetCount="10" TargetControlID="iUsuarioBuscar" FirstRowSelected="false"></ajaxToolkit:AutoCompleteExtender>
                                             <span class="input-group-btn">
-                                                <asp:LinkButton ID="lkbUsuarioBuscar" runat="server" CssClass="btn btn-light  form-control" TabIndex="5">
+                                                <asp:LinkButton ID="lkbUsuarioBuscar" runat="server" CssClass="btn btn-light  form-control" TabIndex="5" OnClick="lkbUsuarioBuscar_Click">
                                                                     <i class="fas fa-search"></i>
                                                 </asp:LinkButton>
                                             </span>
                                         </div>
-
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <asp:GridView CssClass="table table-sm" ID="gvUsuarios" runat="server" AutoGenerateColumns="False" AllowPaging="True" CellPadding="3" ForeColor="Black" GridLines="Vertical" TabIndex="5" PageSize="5" BackColor="White" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px">
+                                                <asp:GridView CssClass="table table-sm" ID="gvUsuarios" runat="server" RowStyle-VerticalAlign="Middle" AutoGenerateColumns="False" AllowPaging="True" CellPadding="3" ForeColor="Black" GridLines="Vertical" TabIndex="5" PageSize="5" BackColor="White" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" OnRowDataBound="gvUsuarios_RowDataBound" OnRowCommand="gvUsuarios_RowCommand" HeaderStyle-CssClass="GridHeader">
                                                     <AlternatingRowStyle BackColor="#CCCCCC" />
                                                     <Columns>
                                                         <asp:BoundField DataField="UsuarioID" HeaderText="ID" SortExpression="UsuarioID" Visible="true" HeaderStyle-CssClass="hideGridColumn" ItemStyle-CssClass="hideGridColumn">
@@ -606,25 +603,38 @@
 
                                                             <ItemStyle CssClass="hideGridColumn"></ItemStyle>
                                                         </asp:BoundField>
-                                                        <asp:BoundField DataField="Usuario" HeaderText="ID" SortExpression="Usuario" Visible="true" />
-                                                        <asp:BoundField DataField="nom_comp" HeaderText="NOMBRE COMPLETO" SortExpression="nom_comp" />
-                                                        <asp:BoundField DataField="FechaRegistro" HeaderText="REGISTRO" SortExpression="FechaRegistro" DataFormatString="{0:dd-MM-yyyy}" HtmlEncode="false" />
+                                                        <asp:BoundField DataField="CodigoUsuario" HeaderText="ID" SortExpression="CodigoUsuario" Visible="true" HeaderStyle-CssClass="align-content-center">
+
+                                                            <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" />
+                                                        </asp:BoundField>
+                                                        <asp:BoundField DataField="nom_comp" HeaderText="NOMBRE COMPLETO" SortExpression="nom_comp">
+
+                                                            <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle"></ItemStyle>
+                                                        </asp:BoundField>
+                                                        <asp:BoundField DataField="FechaRegistro" HeaderText="REGISTRO" SortExpression="FechaRegistro" DataFormatString="{0:dd-MM-yyyy}" HtmlEncode="false">
+
+                                                            <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle"></ItemStyle>
+                                                        </asp:BoundField>
                                                         <asp:TemplateField HeaderText="ESTATUS">
                                                             <ItemTemplate>
-                                                                <asp:DropDownList ID="ddl_usr_estatus" runat="server" AutoPostBack="true">
+                                                                <asp:DropDownList class="form-control" ID="ddlEstatusUsuarioID" runat="server">
                                                                 </asp:DropDownList>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
 
                                                         <asp:TemplateField HeaderText="" HeaderImageUrl="~/img/ico_ve.png">
                                                             <ItemTemplate>
-                                                                <asp:Button CssClass="btn btn-warning" ID="btn_infusr" runat="server" Text="Ir" CommandName="btn_usr_ve" />
+                                                                <asp:Button CssClass="btn btn-warning" ID="btnInformacionUsuario" runat="server" Text="Ir" CommandName="cnInformacionUsuario" />
                                                             </ItemTemplate>
+
+                                                            <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle"></ItemStyle>
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="PERFIL">
                                                             <ItemTemplate>
                                                                 <asp:Button CssClass="btn btn-warning" ID="btn_usrp" runat="server" Text="Ir" CommandName="btn_usrp" />
                                                             </ItemTemplate>
+
+                                                            <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle"></ItemStyle>
                                                         </asp:TemplateField>
                                                     </Columns>
                                                     <FooterStyle BackColor="#CCCCCC" />
@@ -643,7 +653,7 @@
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <asp:DropDownList CssClass="form-control input-box" ID="sAreaUsuario" runat="server" TabIndex="5" required="required" AutoPostBack="true" OnSelectedIndexChanged="sAreaUsuario_SelectedIndexChanged"></asp:DropDownList>
+                                                        <asp:DropDownList CssClass="form-control input-box" ID="sAreaUsuario" runat="server" TabIndex="6" required="required" AutoPostBack="true" OnSelectedIndexChanged="sAreaUsuario_SelectedIndexChanged"></asp:DropDownList>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
@@ -654,24 +664,24 @@
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <select class="form-control" runat="server" id="SGeneroUsuario" tabindex="8" required="required">
+                                                        <select class="form-control" runat="server" id="sGeneroUsuario" tabindex="8" required="required">
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-2">
-                                                    <input type="date" class="form-control" runat="server" id="iNacimientoUsuario" required="required" placeholder="Fecha de Nacimiento" tabindex="12" value="null" />
+                                                    <input type="date" class="form-control" runat="server" id="iNacimientoUsuario" required="required" placeholder="Fecha de Nacimiento" tabindex="9" value="null" />
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="form-group col-md-4">
-                                                    <input type="text" class="form-control" runat="server" id="iNombresUsuario" required="required" placeholder="Nombre(s)" tabindex="9" />
+                                                    <input type="text" class="form-control" runat="server" id="iNombresUsuario" required="required" placeholder="Nombre(s)" tabindex="10" onkeyup="this.value = this.value.toUpperCase();" />
                                                 </div>
                                                 <div class="form-group col-md-4">
-                                                    <input type="text" class="form-control" runat="server" id="iApaternoUsuario" required="required" placeholder="Apellido Paterno" tabindex="10" />
+                                                    <input type="text" class="form-control" runat="server" id="iApaternoUsuario" required="required" placeholder="Apellido Paterno" tabindex="11" onkeyup="this.value = this.value.toUpperCase();" />
                                                 </div>
                                                 <div class="form-group col-md-4">
-                                                    <input type="text" class="form-control" runat="server" id="iAmaternoUsuario" required="required" placeholder="Apellido Materno" tabindex="11" />
+                                                    <input type="text" class="form-control" runat="server" id="iAmaternoUsuario" required="required" placeholder="Apellido Materno" tabindex="12" onkeyup="this.value = this.value.toUpperCase();" />
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -706,18 +716,16 @@
                         <asp:UpdatePanel ID="upConfiguracion" runat="server" UpdateMode="Conditional">
                             <ContentTemplate>
                                 <div class="card" runat="server" id="cardConfiguracion" visible="false">
-                                    <div class="card-header">
-                                        <ul class="nav nav-tabs card-header-tabs">
-                                            <li class="nav-item">
-                                                <asp:LinkButton CssClass="nav-item nav-link" ID="lkbNotificaciones" runat="server" OnClick="lkbNotificaciones_Click">Notificaciones <i class="fas fa-tasks" style="color: orangered"></i></asp:LinkButton>
-                                            </li>
-                                            <li class="nav-item">
-                                                <asp:LinkButton CssClass="nav-item nav-link" ID="lkbCatalogos" runat="server" OnClick="lkbCatalogos_Click">Catálogos <i class="fas fa-tasks" style="color: orangered"></i></asp:LinkButton>
-                                            </li>
-                                            <li class="nav-item">
-                                                <asp:LinkButton CssClass="nav-item nav-link" ID="lkbRegistroInicial" runat="server" OnClick="lkbRegistroInicial_Click">Registro Inicial <i class="fas fa-tasks" style="color: orangered"></i></asp:LinkButton>
-                                            </li>
-                                        </ul>
+                                    <div class="card-header bg-secondary">
+
+                                        <div class="input-group">
+
+                                            <asp:LinkButton CssClass="btn btn-light" ID="lkbNotificaciones" runat="server" OnClick="lkbNotificaciones_Click">Notificaciones <i class="far fa-envelope text-secondary fa-lg" ></i></asp:LinkButton>
+                                            &nbsp;
+                                            <asp:LinkButton CssClass="btn btn-light" ID="lkbCatalogos" runat="server" OnClick="lkbCatalogos_Click">Catálogos <i class="far fa-list-alt text-secondary fa-lg"></i></asp:LinkButton>
+                                            &nbsp;
+                                            <asp:LinkButton CssClass="btn btn-light" ID="lkbRegistroInicial" runat="server" OnClick="lkbRegistroInicial_Click">Registro Inicial <i class="fas fa-spell-check text-secondary fa-lg"></i></asp:LinkButton>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <asp:UpdatePanel ID="upRegistroInicial" runat="server" UpdateMode="Conditional" Visible="false">

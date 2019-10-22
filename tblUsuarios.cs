@@ -17,7 +17,7 @@ namespace IntelimundoERP
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblUsuarios()
         {
-            this.tbl_UsuariosCorporativo = new HashSet<tbl_UsuariosCorporativo>();
+            this.tblUsuariosCorporativo = new HashSet<tblUsuariosCorporativo>();
             this.tblUsuariosEmpresa = new HashSet<tblUsuariosEmpresa>();
         }
     
@@ -31,14 +31,16 @@ namespace IntelimundoERP
         public string apaterno { get; set; }
         public string amaterno { get; set; }
         public Nullable<int> GeneroID { get; set; }
+        public Nullable<System.DateTime> FechaNacimiento { get; set; }
         public Nullable<int> EstatusRegistroID { get; set; }
         public Nullable<System.DateTime> FechaRegistro { get; set; }
     
         public virtual catGenero catGenero { get; set; }
         public virtual catTipoUsuario catTipoUsuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tbl_UsuariosCorporativo> tbl_UsuariosCorporativo { get; set; }
+        public virtual ICollection<tblUsuariosCorporativo> tblUsuariosCorporativo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblUsuariosEmpresa> tblUsuariosEmpresa { get; set; }
+        public virtual catEstatusRegistro catEstatusRegistro { get; set; }
     }
 }

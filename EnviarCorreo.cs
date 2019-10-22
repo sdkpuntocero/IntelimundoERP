@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Net.Mail;
 
@@ -10,14 +11,15 @@ namespace IntelimundoERP
         {
             Guid iNotificacionID = Guid.NewGuid();
             var i_registro = new IntelimundoERPEntities();
-
+            TextInfo t_asunto = new CultureInfo("es-MX", false).TextInfo;
+            string strAsunto = t_asunto.ToTitleCase(iAsunto);
             var d_emp = new tblNotificacion
             {
                 NotificacionID = iNotificacionID,
                 email = iEmail,
                 Usuario = iUsuario,
                 Clave = iClave,
-                Asunto = iAsunto,
+                Asunto = strAsunto,
                 SMTP = iSMTP,
                 Puerto = iPuerto,
                 EstatusRegistroID = 1,

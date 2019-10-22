@@ -531,3 +531,8 @@ table tr th {
 .desc:after {
     content: " ↓";
 }
+
+
+.GridHeader {
+    text-align: center !important;
+}

@@ -12,13 +12,12 @@ namespace IntelimundoERP
     using System;
     using System.Collections.Generic;
     
-    public partial class tbl_UsuariosCorporativo
+    public partial class catBusquedaUsuario
     {
-        public int UsuariosCorporativoID { get; set; }
-        public Nullable<System.Guid> UsuarioID { get; set; }
-        public System.Guid CorporativoID { get; set; }
+        public int BusquedaUsuarioID { get; set; }
+        public string BusquedaUsuario { get; set; }
+        public Nullable<System.Guid> CorporativoID { get; set; }
     
         public virtual tblCorporativo tblCorporativo { get; set; }
-        public virtual tblUsuarios tblUsuarios { get; set; }
     }
 }

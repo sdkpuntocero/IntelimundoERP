@@ -1798,6 +1798,12 @@
     <Compile Include="catBusquedaCentro.cs">
       <DependentUpon>ModelERP.tt</DependentUpon>
     </Compile>
+    <Compile Include="catBusquedaUsuario.cs">
+      <DependentUpon>ModelERP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="catEstatusRegistro.cs">
+      <DependentUpon>ModelERP.tt</DependentUpon>
+    </Compile>
     <Compile Include="catGenero.cs">
       <DependentUpon>ModelERP.tt</DependentUpon>
     </Compile>
@@ -1863,7 +1869,13 @@
     <Compile Include="tblCentro.cs">
       <DependentUpon>ModelERP.tt</DependentUpon>
     </Compile>
+    <Compile Include="tblControlLicencias.cs">
+      <DependentUpon>ModelERP.tt</DependentUpon>
+    </Compile>
     <Compile Include="tblCorporativo.cs">
+      <DependentUpon>ModelERP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblEgresos.cs">
       <DependentUpon>ModelERP.tt</DependentUpon>
     </Compile>
     <Compile Include="tblEmpresa.cs">
@@ -1881,10 +1893,10 @@
     <Compile Include="tblUsuarios.cs">
       <DependentUpon>ModelERP.tt</DependentUpon>
     </Compile>
-    <Compile Include="tblUsuariosEmpresa.cs">
+    <Compile Include="tblUsuariosCorporativo.cs">
       <DependentUpon>ModelERP.tt</DependentUpon>
     </Compile>
-    <Compile Include="tbl_UsuariosCorporativo.cs">
+    <Compile Include="tblUsuariosEmpresa.cs">
       <DependentUpon>ModelERP.tt</DependentUpon>
     </Compile>
     <Compile Include="Test.aspx.cs">
