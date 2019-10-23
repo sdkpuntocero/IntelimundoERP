@@ -921,6 +921,40 @@ namespace IntelimundoERP
 
         protected void btnRegistroInicialG_Click(object sender, EventArgs e)
         {
+
+            string striNombreDirector = Request.Form["iNombreDirector"];
+            string striApaternoDirector = Request.Form["iApaternoDirector"];
+            string striAmaternoDirector = Request.Form["iAmaternoDirector"];
+            string striNombreEmpresa = Request.Form["iNombreEmpresa"];
+            int sTipoRFCEmpresa = int.Parse(Request.Form["sTipoRFCEmpresa"]);
+            string striRFCEmpresa = Request.Form["iRFCEmpresa"];
+            string striEmailEmpresa = Request.Form["iEmailEmpresa"];
+            string striTelefonoEmpresa = Request.Form["iTelefonoEmpresa"];
+            string striCalleNumeroEmpresa = Request.Form["iCalleNumeroEmpresa"];
+            string striCodigoPostalEmpresa = Request.Form["iCodigoPostalEmpresa"];
+            int sColoniaEmpresa = int.Parse(Request.Form["sColoniaEmpresa"]);
+            string striNombreCorporativo = Request.Form["iNombreCorporativo"];
+            string striEmailCorporativo = Request.Form["iEmailCorporativo"];
+            string striTelefonoCorporativo = Request.Form["iTelefonoCorporativo"];
+            string striCalleNumeroCorporativo = Request.Form["iCalleNumeroCorporativo"];
+            string striCodigoPostalCorporativo = Request.Form["iCodigoPostalCorporativo"];
+            int sColoniaCorporativo = int.Parse(Request.Form["sColoniaCorporativo"]);
+
+     
+
+            ControlEmpresa.AltaEmpresa(striNombreEmpresa, sTipoRFCEmpresa, striRFCEmpresa, striEmailEmpresa, striTelefonoEmpresa, striCalleNumeroEmpresa, striCodigoPostalEmpresa, sColoniaEmpresa);
+            //ControlUsuarios.AltaUsuario(2, 2, strNombreDirector, strApaternoDirector, strAmaternoDirector);
+
+            if (ControlCorporativo.AltaCorporativo(striNombreCorporativo, striEmailCorporativo, striTelefonoCorporativo, striCalleNumeroCorporativo, striCodigoPostalCorporativo, sColoniaCorporativo))
+
+            {
+                limpiaRegistroInicial();
+                Mensaje("Datos guardados con éxito, favor de revisar su correo donde se le enviaran las credenciales de acceso, revisar su bandeja de spam");
+            }
+            else
+            {
+                Mensaje("Error.");
+            }
         }
 
         private void LimpiaNotificacion()

@@ -40,6 +40,7 @@ namespace IntelimundoERP
             usr_ID = (Guid)(Session["UsuarioFirmadoID"]);
             using (var mUsuario = new IntelimundoERPEntities())
             {
+
                 var iUsuario = (from a in mUsuario.tblUsuarios
                                 where a.UsuarioID == usr_ID
                                 select a
