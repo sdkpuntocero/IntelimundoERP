@@ -1,27 +1,35 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 
 namespace IntelimundoERP
 {
     public class ControlCorporativo
     {
-        public static bool AltaCorporativo(string strNombreCorporativo, string strEmailCorporativo, string strTelefonoCorporativo, string strCalleNumeroCorporativo, string strCodigoPostalCorporativo, int sColoniaCorporativo)
+        public static bool AltaCorporativo(string striNombreCorporativo, string strEmailCorporativo, string strTelefonoCorporativo, string striCalleNumeroCorporativo, string strCodigoPostalCorporativo, int sColoniaCorporativo)
         {
             Guid CorporativoID = Guid.NewGuid(), EmpresaID = Guid.NewGuid(), UsuarioID = Guid.NewGuid();
+            string strNombreCorporativo = null, strCalleNumeroCorporativo = null;
+
+            TextInfo ciNombreCorporativo = new CultureInfo("es-MX", false).TextInfo;
+            TextInfo ciCalleNumeroCorporativo = new CultureInfo("es-MX", false).TextInfo;
+
+            strNombreCorporativo = ciNombreCorporativo.ToTitleCase(striNombreCorporativo.ToLower());
+            strCalleNumeroCorporativo = ciCalleNumeroCorporativo.ToTitleCase(striCalleNumeroCorporativo.ToLower());
 
             try
             {
-                using (IntelimundoERPEntities mEmpresa = new IntelimundoERPEntities())
+                using (IntelimundoERPEntities mCorporativo = new IntelimundoERPEntities())
                 {
-                    var iEmpresa = (from c in mEmpresa.tblEmpresa
+                    var iCorporativo = (from c in mCorporativo.tblEmpresa
                                     select c).ToList();
 
-                    if (iEmpresa.Count == 0)
+                    if (iCorporativo.Count == 0)
                     {
                     }
                     else
                     {
-                        EmpresaID = iEmpresa[0].EmpresaID;
+                        EmpresaID = iCorporativo[0].EmpresaID;
                     }
                 }
 

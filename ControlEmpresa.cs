@@ -9,24 +9,14 @@ namespace IntelimundoERP
         public static bool AltaEmpresa(string striNombreEmpresa, int sTipoRFCEmpresa, string strRFCEmpresa, string strEmailEmpresa, string strTelefonoEmpresa, string striCalleNumeroEmpresa, string strCodigoPostalEmpresa, int sColoniaEmpresa)
         {
             Guid EmpresaID = Guid.NewGuid();
-            string strNombreDirector = null, strApaternoDirector = null, strAmaternoDirector = null, strNombreEmpresa = null, strNombreCorporativo = null, strCalleNumeroEmpresa = null, strCalleNumeroCorporativo = null;
+            string strNombreEmpresa = null, strCalleNumeroEmpresa = null;
 
-            TextInfo CINombre = new CultureInfo("es-MX", false).TextInfo;
-            TextInfo CIApaterno = new CultureInfo("es-MX", false).TextInfo;
-            TextInfo CIAmaterno = new CultureInfo("es-MX", false).TextInfo;
-            TextInfo CICompania = new CultureInfo("es-MX", false).TextInfo;
-            TextInfo CICompaniaNombre = new CultureInfo("es-MX", false).TextInfo;
+            TextInfo ciNombreEmpresa = new CultureInfo("es-MX", false).TextInfo;
+            TextInfo ciCalleNumeroEmpresa = new CultureInfo("es-MX", false).TextInfo;
 
-            TextInfo CICalleNum = new CultureInfo("es-MX", false).TextInfo;
+            strNombreEmpresa = ciNombreEmpresa.ToTitleCase(striNombreEmpresa.ToLower());
+            strCalleNumeroEmpresa = ciCalleNumeroEmpresa.ToTitleCase(striCalleNumeroEmpresa.ToLower());
 
-            strNombreDirector = CINombre.ToTitleCase(strNombreDirector.ToLower());
-            strApaternoDirector = CIApaterno.ToTitleCase(strApaternoDirector.ToLower());
-            strAmaternoDirector = CIAmaterno.ToTitleCase(strAmaternoDirector.ToLower());
-
-            strNombreEmpresa = CICompania.ToTitleCase(strNombreEmpresa.ToLower());
-            strNombreCorporativo = CICompaniaNombre.ToTitleCase(strNombreCorporativo.ToLower());
-            strCalleNumeroEmpresa = CICalleNum.ToTitleCase(strCalleNumeroEmpresa.ToLower());
-            strCalleNumeroCorporativo = CICalleNum.ToTitleCase(strCalleNumeroCorporativo.ToLower());
             try
             {
                 using (IntelimundoERPEntities mEmpresa = new IntelimundoERPEntities())

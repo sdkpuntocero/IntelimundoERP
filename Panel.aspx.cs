@@ -65,7 +65,7 @@ namespace IntelimundoERP
                     }
                 }
             }
-         
+
             return columnData;
         }
 
@@ -289,7 +289,6 @@ namespace IntelimundoERP
                 {
                     if (strCodigoUsuario == "TODO")
                     {
-
                         var i_f_b = (from a in md_fb.tblUsuarios
                                      select new
                                      {
@@ -313,7 +312,6 @@ namespace IntelimundoERP
                             gvUsuarios.DataBind();
                             gvUsuarios.Visible = true;
                         }
-
                     }
                     else
                     {
@@ -341,12 +339,9 @@ namespace IntelimundoERP
                             gvUsuarios.DataBind();
                             gvUsuarios.Visible = true;
                         }
-
                     }
-
                 }
             }
-
             else
             {
                 Mensaje("Seleccionar tipo de busqueda");
@@ -356,6 +351,7 @@ namespace IntelimundoERP
         #endregion BusquedaDeUsuarios
 
         #region TablaUsuarios
+
         protected void gvUsuarios_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -402,7 +398,6 @@ namespace IntelimundoERP
 
                     using (IntelimundoERPEntities mInformacionusuario = new IntelimundoERPEntities())
                     {
-
                         var fInformacionusuario = (from a in mInformacionusuario.tblUsuarios
                                                    where a.UsuarioID == UsuarioFilradoID
                                                    select new
@@ -499,7 +494,9 @@ namespace IntelimundoERP
                 }
             }
         }
-        #endregion
+
+        #endregion TablaUsuarios
+
         protected void btnUsuarioG_Click(object sender, EventArgs e)
         {
             string striNombreUsuario = Request.Form["iNombresUsuario"];
@@ -520,10 +517,6 @@ namespace IntelimundoERP
                 Mensaje("Error.");
             }
         }
-
-
-
-
 
         private void sComposUsuario()
         {
@@ -602,8 +595,6 @@ namespace IntelimundoERP
             }
         }
 
-
-
         private void limpiaRegistroUsuario()
         {
             sComposUsuario();
@@ -619,6 +610,7 @@ namespace IntelimundoERP
         #endregion ControlUsuarios
 
         #region Configuracion
+
         protected void lkbSalir_Click(object sender, EventArgs e)
         {
             Session.Abandon();
@@ -646,6 +638,7 @@ namespace IntelimundoERP
         protected void btnCodigoPostalFiscalC_Click(object sender, EventArgs e)
         {
         }
+
         protected void lkbRegIniEdit_Click(object sender, EventArgs e)
         {
             using (IntelimundoERPEntities mRegistroInicial = new IntelimundoERPEntities())
@@ -918,13 +911,12 @@ namespace IntelimundoERP
             upConfiguracion.Update();
         }
 
-
         protected void btnRegistroInicialG_Click(object sender, EventArgs e)
         {
-
             string striNombreDirector = Request.Form["iNombreDirector"];
             string striApaternoDirector = Request.Form["iApaternoDirector"];
             string striAmaternoDirector = Request.Form["iAmaternoDirector"];
+
             string striNombreEmpresa = Request.Form["iNombreEmpresa"];
             int sTipoRFCEmpresa = int.Parse(Request.Form["sTipoRFCEmpresa"]);
             string striRFCEmpresa = Request.Form["iRFCEmpresa"];
@@ -933,6 +925,7 @@ namespace IntelimundoERP
             string striCalleNumeroEmpresa = Request.Form["iCalleNumeroEmpresa"];
             string striCodigoPostalEmpresa = Request.Form["iCodigoPostalEmpresa"];
             int sColoniaEmpresa = int.Parse(Request.Form["sColoniaEmpresa"]);
+
             string striNombreCorporativo = Request.Form["iNombreCorporativo"];
             string striEmailCorporativo = Request.Form["iEmailCorporativo"];
             string striTelefonoCorporativo = Request.Form["iTelefonoCorporativo"];
@@ -940,12 +933,11 @@ namespace IntelimundoERP
             string striCodigoPostalCorporativo = Request.Form["iCodigoPostalCorporativo"];
             int sColoniaCorporativo = int.Parse(Request.Form["sColoniaCorporativo"]);
 
-     
-
             ControlEmpresa.AltaEmpresa(striNombreEmpresa, sTipoRFCEmpresa, striRFCEmpresa, striEmailEmpresa, striTelefonoEmpresa, striCalleNumeroEmpresa, striCodigoPostalEmpresa, sColoniaEmpresa);
-            //ControlUsuarios.AltaUsuario(2, 2, strNombreDirector, strApaternoDirector, strAmaternoDirector);
 
-            if (ControlCorporativo.AltaCorporativo(striNombreCorporativo, striEmailCorporativo, striTelefonoCorporativo, striCalleNumeroCorporativo, striCodigoPostalCorporativo, sColoniaCorporativo))
+            ControlCorporativo.AltaCorporativo(striNombreCorporativo, striEmailCorporativo, striTelefonoCorporativo, striCalleNumeroCorporativo, striCodigoPostalCorporativo, sColoniaCorporativo);
+
+            if (ControlUsuarios.AltaUsuario(2, 2, 0, DateTime.Now, striNombreDirector, striApaternoDirector, striAmaternoDirector))
 
             {
                 limpiaRegistroInicial();
@@ -981,8 +973,6 @@ namespace IntelimundoERP
             string iSMTP = Request.Form["i_smtp"];
             int iPuerto = int.Parse(Request.Form["i_puerto"]);
 
-      
-
             if (EnviarCorreo.AltaNotificacion(iEmail, iUsuario, iClave, iAsunto, iSMTP, iPuerto))
             {
                 LimpiaNotificacion();
@@ -1000,6 +990,7 @@ namespace IntelimundoERP
         }
 
         #endregion Configuracion
+
         protected void lkbControlUsuarios_Click(object sender, EventArgs e)
         {
             breadcrumbN1.Text = "Control de Datos";
@@ -1013,6 +1004,7 @@ namespace IntelimundoERP
             cardCentro.Visible = false;
             upCentro.Update();
         }
+
         private void Mensaje(string contenido)
         {
             lblModalTitle.Text = "Intelimundo";
