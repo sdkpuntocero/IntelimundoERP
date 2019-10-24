@@ -24,9 +24,7 @@ namespace IntelimundoERP
         public string Descripcion { get; set; }
         public Nullable<int> EstatusRegistroID { get; set; }
         public Nullable<System.DateTime> FechaRegistro { get; set; }
-        public System.Guid CorporativoID { get; set; }
     
-        public virtual tblCorporativo tblCorporativo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblAreasPerfil> tblAreasPerfil { get; set; }
     }

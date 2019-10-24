@@ -27,6 +27,8 @@ namespace IntelimundoERP
     
         public virtual DbSet<catAreas> catAreas { get; set; }
         public virtual DbSet<catBusquedaCentro> catBusquedaCentro { get; set; }
+        public virtual DbSet<catBusquedaUsuario> catBusquedaUsuario { get; set; }
+        public virtual DbSet<catEstatusRegistro> catEstatusRegistro { get; set; }
         public virtual DbSet<catGenero> catGenero { get; set; }
         public virtual DbSet<catLicencia> catLicencia { get; set; }
         public virtual DbSet<catPerfil> catPerfil { get; set; }
@@ -45,7 +47,5 @@ namespace IntelimundoERP
         public virtual DbSet<tblUsuarios> tblUsuarios { get; set; }
         public virtual DbSet<tblUsuariosCorporativo> tblUsuariosCorporativo { get; set; }
         public virtual DbSet<tblUsuariosEmpresa> tblUsuariosEmpresa { get; set; }
-        public virtual DbSet<catBusquedaUsuario> catBusquedaUsuario { get; set; }
-        public virtual DbSet<catEstatusRegistro> catEstatusRegistro { get; set; }
     }
 }

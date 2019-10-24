@@ -17,13 +17,12 @@ namespace IntelimundoERP
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblCorporativo()
         {
-            this.catAreas = new HashSet<catAreas>();
+            this.catBusquedaUsuario = new HashSet<catBusquedaUsuario>();
             this.tblCentro = new HashSet<tblCentro>();
             this.tblUsuariosCorporativo = new HashSet<tblUsuariosCorporativo>();
             this.tblEgresos = new HashSet<tblEgresos>();
             this.tblNotificacion = new HashSet<tblNotificacion>();
             this.tblServicios = new HashSet<tblServicios>();
-            this.catBusquedaUsuario = new HashSet<catBusquedaUsuario>();
         }
     
         public System.Guid CorporativoID { get; set; }
@@ -38,7 +37,7 @@ namespace IntelimundoERP
         public Nullable<System.Guid> EmpresaID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<catAreas> catAreas { get; set; }
+        public virtual ICollection<catBusquedaUsuario> catBusquedaUsuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblCentro> tblCentro { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
@@ -50,7 +49,5 @@ namespace IntelimundoERP
         public virtual ICollection<tblNotificacion> tblNotificacion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblServicios> tblServicios { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<catBusquedaUsuario> catBusquedaUsuario { get; set; }
     }
 }

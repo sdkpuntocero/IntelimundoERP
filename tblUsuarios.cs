@@ -35,12 +35,13 @@ namespace IntelimundoERP
         public Nullable<int> EstatusRegistroID { get; set; }
         public Nullable<System.DateTime> FechaRegistro { get; set; }
     
+        public virtual catEstatusRegistro catEstatusRegistro { get; set; }
         public virtual catGenero catGenero { get; set; }
+        public virtual catPerfil catPerfil { get; set; }
         public virtual catTipoUsuario catTipoUsuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblUsuariosCorporativo> tblUsuariosCorporativo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblUsuariosEmpresa> tblUsuariosEmpresa { get; set; }
-        public virtual catEstatusRegistro catEstatusRegistro { get; set; }
     }
 }

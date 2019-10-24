@@ -65,7 +65,7 @@ namespace IntelimundoERP
                     }
                 }
             }
-         
+
             return columnData;
         }
 
@@ -88,8 +88,8 @@ namespace IntelimundoERP
                     case 2:
 
                         var iUsuarioEmpresa = (from a in mUsuario.tblUsuarios
-                                               join b in mUsuario.tblUsuariosEmpresa on a.UsuarioID equals b.UsuarioID
-                                               join c in mUsuario.tblEmpresa on b.EmpresaID equals c.EmpresaID
+                                               join b in mUsuario.tblUsuariosCorporativo on a.UsuarioID equals b.UsuarioID
+                                               join c in mUsuario.tblCorporativo on b.CorporativoID equals c.CorporativoID
                                                where a.UsuarioID == usr_ID
                                                select new
                                                {
@@ -103,7 +103,7 @@ namespace IntelimundoERP
 
                         lblNombreUsuario.Text = iUsuarioEmpresa.nombres;
                         lblNombreApellidos.Text = iUsuarioEmpresa.apaterno + ' ' + iUsuarioEmpresa.amaterno;
-                        lblCorporativo.Text = "Empresa: " + iUsuarioEmpresa.Nombre;
+                        lblCorporativo.Text = "Corporativo: " + iUsuarioEmpresa.Nombre;
 
                         break;
 
@@ -940,10 +940,10 @@ namespace IntelimundoERP
             string striCodigoPostalCorporativo = Request.Form["iCodigoPostalCorporativo"];
             int sColoniaCorporativo = int.Parse(Request.Form["sColoniaCorporativo"]);
 
-     
+
 
             ControlEmpresa.AltaEmpresa(striNombreEmpresa, sTipoRFCEmpresa, striRFCEmpresa, striEmailEmpresa, striTelefonoEmpresa, striCalleNumeroEmpresa, striCodigoPostalEmpresa, sColoniaEmpresa);
-            //ControlUsuarios.AltaUsuario(2, 2, strNombreDirector, strApaternoDirector, strAmaternoDirector);
+            ControlUsuarios.AltaUsuario(2, 2, 1, DateTime.Now, striNombreDirector, striApaternoDirector, striAmaternoDirector);
 
             if (ControlCorporativo.AltaCorporativo(striNombreCorporativo, striEmailCorporativo, striTelefonoCorporativo, striCalleNumeroCorporativo, striCodigoPostalCorporativo, sColoniaCorporativo))
 
@@ -981,7 +981,7 @@ namespace IntelimundoERP
             string iSMTP = Request.Form["i_smtp"];
             int iPuerto = int.Parse(Request.Form["i_puerto"]);
 
-      
+
 
             if (EnviarCorreo.AltaNotificacion(iEmail, iUsuario, iClave, iAsunto, iSMTP, iPuerto))
             {

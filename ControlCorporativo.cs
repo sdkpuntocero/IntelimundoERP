@@ -1,13 +1,22 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 
 namespace IntelimundoERP
 {
     public class ControlCorporativo
     {
-        public static bool AltaCorporativo(string strNombreCorporativo, string strEmailCorporativo, string strTelefonoCorporativo, string strCalleNumeroCorporativo, string strCodigoPostalCorporativo, int sColoniaCorporativo)
+        public static bool AltaCorporativo(string striNombreCorporativo, string strEmailCorporativo, string strTelefonoCorporativo, string striCalleNumeroCorporativo, string strCodigoPostalCorporativo, int sColoniaCorporativo)
         {
             Guid CorporativoID = Guid.NewGuid(), EmpresaID = Guid.NewGuid(), UsuarioID = Guid.NewGuid();
+
+            string strNombreCorporativo = null, strCalleNumeroCorporativo = null;
+
+            TextInfo ciEmpresa = new CultureInfo("es-MX", false).TextInfo;
+            TextInfo ciCalleNumeroEmpresa = new CultureInfo("es-MX", false).TextInfo;
+
+            strNombreCorporativo = ciEmpresa.ToTitleCase(striNombreCorporativo.ToLower());
+            strCalleNumeroCorporativo = ciCalleNumeroEmpresa.ToTitleCase(striCalleNumeroCorporativo.ToLower());
 
             try
             {
@@ -48,8 +57,6 @@ namespace IntelimundoERP
                             EmpresaID = EmpresaID
                         };
 
-                   
-
                         var dDirector = (from iDirector in mCorporativo.tblUsuarios
                                          where iDirector.TipoUsuarioID == 2
                                          select iDirector).ToList();
@@ -62,9 +69,14 @@ namespace IntelimundoERP
                             UsuarioID = UsuarioID
                         };
 
+                       
+
                         i_registro.tblCorporativo.Add(diCorporativo);
+
                         i_registro.tblUsuariosCorporativo.Add(dCorporativoU);
+
                         i_registro.SaveChanges();
+
                     }
                     else
                     {

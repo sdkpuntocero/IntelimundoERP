@@ -18,6 +18,7 @@ namespace IntelimundoERP
         public catPerfil()
         {
             this.tblAreasPerfil = new HashSet<tblAreasPerfil>();
+            this.tblUsuarios = new HashSet<tblUsuarios>();
         }
     
         public int PerfilID { get; set; }
@@ -25,5 +26,7 @@ namespace IntelimundoERP
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblAreasPerfil> tblAreasPerfil { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblUsuarios> tblUsuarios { get; set; }
     }
 }

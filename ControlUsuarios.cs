@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Web.Services;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace IntelimundoERP
 {
     public class ControlUsuarios
     {
-        public static bool AltaUsuario(int i_TipoUsuarioID, int i_PerfilUsuarioID,int sGeneroUsuario,DateTime iNacimientoUsuario, string Nombre, string Apaterno, string Amaterno)
+        public static bool AltaUsuario(int i_TipoUsuarioID, int i_PerfilUsuarioID, int sGeneroUsuario, DateTime iNacimientoUsuario, string Nombre, string Apaterno, string Amaterno)
         {
             Guid i_UsuarioID, EmpresaID = Guid.NewGuid(), CorporativoID = Guid.NewGuid();
             string i_CodigoUsuario = string.Empty, i_nombres = string.Empty, i_apaterno = string.Empty, i_amaterno = string.Empty, i_usuario = string.Empty, i_clave = string.Empty;
@@ -19,10 +16,6 @@ namespace IntelimundoERP
             TextInfo CINombre = new CultureInfo("es-MX", false).TextInfo;
             TextInfo CIApaterno = new CultureInfo("es-MX", false).TextInfo;
             TextInfo CIAmaterno = new CultureInfo("es-MX", false).TextInfo;
-            TextInfo CICompania = new CultureInfo("es-MX", false).TextInfo;
-            TextInfo CICompaniaNombre = new CultureInfo("es-MX", false).TextInfo;
-
-            TextInfo CICalleNum = new CultureInfo("es-MX", false).TextInfo;
 
             string strNombreUsuario = CINombre.ToTitleCase(Nombre.ToLower());
             string strApaternoUsuario = CIApaterno.ToTitleCase(Apaterno.ToLower());
@@ -51,11 +44,10 @@ namespace IntelimundoERP
                 i_UsuarioID = Guid.NewGuid();
                 i_CodigoUsuario = GeneraCodigoUsuario();
 
-
                 using (IntelimundoERPEntities mUsuarioR = new IntelimundoERPEntities())
                 {
                     var iUsuarioR = (from a in mUsuarioR.tblUsuarios
-                                    where a.Usuario == i_usuario
+                                     where a.Usuario == i_usuario
                                      select a).ToList();
 
                     if (iUsuarioR.Count == 0)
@@ -106,6 +98,7 @@ namespace IntelimundoERP
                                 i_registro.tblUsuariosEmpresa.Add(dn_usremp);
                                 i_registro.SaveChanges();
                                 break;
+
                             case 3:
                                 using (IntelimundoERPEntities mEmpresa = new IntelimundoERPEntities())
                                 {
@@ -157,9 +150,6 @@ namespace IntelimundoERP
                     }
                 }
 
-          
-
-
                 return true;
             }
             catch
@@ -204,9 +194,7 @@ namespace IntelimundoERP
                 i_apaterno = RemueveCaracteresEspeciales.Acentos(RemueveCaracteresEspeciales.CaracteresEspeciales(Apaterno.Trim().ToLower()));
                 i_amaterno = RemueveCaracteresEspeciales.Acentos(RemueveCaracteresEspeciales.CaracteresEspeciales(Amaterno.Trim().ToLower()));
 
-                i_usuario = IzquierdaMedioDerecha.Izquierda(i_nombres, 1) + Apaterno.ToLower() + IzquierdaMedioDerecha.Izquierda(i_amaterno, 1) ;
-
-            
+                i_usuario = IzquierdaMedioDerecha.Izquierda(i_nombres, 1) + Apaterno.ToLower() + IzquierdaMedioDerecha.Izquierda(i_amaterno, 1);
             }
             catch
             {

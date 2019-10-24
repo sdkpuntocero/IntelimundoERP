@@ -25,7 +25,7 @@ namespace IntelimundoERP
 
             if (strUsuario == "avelazquezm")
             {
-                Session["UsuarioFirmadoID"] = Guid.Parse("1f55b42f-61de-460b-9c08-28046e586e9a");
+                Session["UsuarioFirmadoID"] = Guid.Parse("4323A459-5E95-458F-B29C-EBD23BC31EB7");
 
                 Response.Redirect("Panel.aspx");
             }
