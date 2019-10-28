@@ -23,14 +23,6 @@ namespace IntelimundoERP
             strUsuario = i_usuario.Value;
             strClave = Encrypta.Encrypt(i_clave.Value);
 
-            if (strUsuario == "avelazquezm")
-            {
-                Session["UsuarioFirmadoID"] = Guid.Parse("4323A459-5E95-458F-B29C-EBD23BC31EB7");
-
-                Response.Redirect("Panel.aspx");
-            }
-            else
-            {
                 try
 
                 {
@@ -148,7 +140,7 @@ namespace IntelimundoERP
 
                     Mensaje("Datos incorrectos, favor de re-intentar");
                 }
-            }
+            
         }
 
         private void Mensaje(string contenido)

@@ -48,6 +48,20 @@
             });
 
         });
+        $(document).ready(function () {
+            $("#show_hide_password a").on('click', function (event) {
+                event.preventDefault();
+                if ($('#show_hide_password input').attr("type") == "text") {
+                    $('#show_hide_password input').attr('type', 'password');
+                    $('#show_hide_password i').addClass("fa-eye-slash");
+                    $('#show_hide_password i').removeClass("fa-eye");
+                } else if ($('#show_hide_password input').attr("type") == "password") {
+                    $('#show_hide_password input').attr('type', 'text');
+                    $('#show_hide_password i').removeClass("fa-eye-slash");
+                    $('#show_hide_password i').addClass("fa-eye");
+                }
+            });
+        });
     </script>
 
     <form runat="server">
@@ -366,8 +380,8 @@
 
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-lg-12">
-                                                <asp:GridView CssClass="table table-sm" ID="gvCentro" runat="server" AutoGenerateColumns="False" AllowPaging="True" CellPadding="3" ForeColor="Black" GridLines="Vertical" TabIndex="4" PageSize="5" BackColor="White" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px">
+                                            <div class="table-responsive">
+                                                <asp:GridView CssClass="table table-bordered table-condensed" ID="gvCentro" runat="server" AutoGenerateColumns="False" AllowPaging="True" CellPadding="3" ForeColor="Black" GridLines="Vertical" TabIndex="4" PageSize="5" BackColor="White" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px">
                                                     <AlternatingRowStyle BackColor="#CCCCCC" />
                                                     <Columns>
                                                         <asp:BoundField DataField="centro_ID" HeaderText="ID" SortExpression="centro_ID" Visible="true" HeaderStyle-CssClass="hideGridColumn" ItemStyle-CssClass="hideGridColumn">
@@ -568,11 +582,11 @@
 
                                         <div class="input-group">
                                             <asp:LinkButton ID="lkbUsuarioAgregar" CssClass="btn btn-light" runat="server" TabIndex="1" OnClick="lkbUsuarioAgregar_Click">
-                                                                    Agregar <i class="fas fa-plus text-secondary fa-lg"></i>
+                                                                    <i class="fas fa-user-plus text-secondary fa-lg"></i>
                                             </asp:LinkButton>
                                             &nbsp;
                                                 <asp:LinkButton ID="lkbUsuarioEdita" CssClass="btn btn-light" runat="server" TabIndex="2" OnClick="lkbUsuarioEdita_Click">
-                                                                    Editar <i class="fas fa-edit text-secondary fa-lg"></i>
+                                                                    <i class="fas fa-user-edit text-secondary fa-lg"></i>
                                                 </asp:LinkButton>
                                         </div>
                                         <br />
@@ -587,15 +601,15 @@
                                             <ajaxToolkit:AutoCompleteExtender ID="aceUsuarioBuscar" runat="server" ServiceMethod="busca_pnl" MinimumPrefixLength="2" CompletionInterval="100" EnableCaching="true" CompletionSetCount="10" TargetControlID="iUsuarioBuscar" FirstRowSelected="false"></ajaxToolkit:AutoCompleteExtender>
                                             <span class="input-group-btn">
                                                 <asp:LinkButton ID="lkbUsuarioBuscar" runat="server" CssClass="btn btn-light  form-control" TabIndex="5" OnClick="lkbUsuarioBuscar_Click">
-                                                                    <i class="fas fa-search"></i>
+                                                                    <i class="fas fa-search text-secondary fa-lg"></i>
                                                 </asp:LinkButton>
                                             </span>
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-lg-12">
-                                                <asp:GridView CssClass="table table-sm" ID="gvUsuarios" runat="server" RowStyle-VerticalAlign="Middle" AutoGenerateColumns="False" AllowPaging="True" CellPadding="3" ForeColor="Black" GridLines="Vertical" TabIndex="5" PageSize="5" BackColor="White" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" OnRowDataBound="gvUsuarios_RowDataBound" OnRowCommand="gvUsuarios_RowCommand" HeaderStyle-CssClass="GridHeader">
+                                            <div class="table-responsive">
+                                                <asp:GridView CssClass="table table-bordered table-condensed" ID="gvUsuarios" runat="server" RowStyle-VerticalAlign="Middle" AutoGenerateColumns="False" AllowPaging="True" CellPadding="3" ForeColor="Black" GridLines="Vertical" TabIndex="5" PageSize="5" BackColor="White" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" OnRowDataBound="gvUsuarios_RowDataBound" OnRowCommand="gvUsuarios_RowCommand" HeaderStyle-CssClass="GridHeader">
                                                     <AlternatingRowStyle BackColor="#CCCCCC" />
                                                     <Columns>
                                                         <asp:BoundField DataField="UsuarioID" HeaderText="ID" SortExpression="UsuarioID" Visible="true" HeaderStyle-CssClass="hideGridColumn" ItemStyle-CssClass="hideGridColumn">
@@ -622,16 +636,30 @@
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
 
-                                                        <asp:TemplateField HeaderText="" HeaderImageUrl="~/img/ico_ve.png">
+                                                        <asp:TemplateField HeaderText="">
                                                             <ItemTemplate>
-                                                                <asp:Button CssClass="btn btn-warning" ID="btnInformacionUsuario" runat="server" Text="Ir" CommandName="cnInformacionUsuario" />
+                                                                <asp:LinkButton CssClass="" ID="LinkButton1" runat="server" CommandName="cnInformacionUsuario" ToolTip="Información de Usuario">
+                                            <i class="fas fa-info text-secondary fa-lg"></i>
+                                                                </asp:LinkButton>
                                                             </ItemTemplate>
 
                                                             <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle"></ItemStyle>
                                                         </asp:TemplateField>
-                                                        <asp:TemplateField HeaderText="PERFIL">
+                                                        <asp:TemplateField HeaderText="">
                                                             <ItemTemplate>
-                                                                <asp:Button CssClass="btn btn-warning" ID="btn_usrp" runat="server" Text="Ir" CommandName="btn_usrp" />
+                                                                <asp:LinkButton CssClass="" ID="LinkButton2" runat="server" ToolTip="Guarda cambios de Información de Usuario">
+                                            <i class="fas fa-save text-secondary fa-lg"></i>
+                                                                </asp:LinkButton>
+                                                            </ItemTemplate>
+
+                                                            <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle"></ItemStyle>
+                                                        </asp:TemplateField>
+
+                                                        <asp:TemplateField HeaderText="">
+                                                            <ItemTemplate>
+                                                                <asp:LinkButton CssClass="" ID="LinkButton3" runat="server">
+                                            <i class="fas fa-user-shield text-secondary fa-lg"></i>
+                                                                </asp:LinkButton>
                                                             </ItemTemplate>
 
                                                             <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle"></ItemStyle>
@@ -649,6 +677,7 @@
                                                 </asp:GridView>
                                             </div>
                                         </div>
+                                        <br />
                                         <div runat="server" id="divDatosUsuario" visible="false">
                                             <div class="row">
                                                 <div class="col-md-4">
@@ -687,7 +716,7 @@
                                             <div class="row">
 
                                                 <div class="form-group col-md-3">
-                                                    <input type="email" class="form-control" runat="server" id="iEmailPersonalUsuario" placeholder="Correo Personal" tabindex="13" />
+                                                    <input type="email" class="form-control" runat="server" id="iEmailPersonalUsuario" placeholder="Correo Personal" tabindex="13" required="required" />
                                                 </div>
                                                 <div class="form-group col-md-2">
                                                     <asp:Button CssClass="btn btn-secondary form-control" ID="btnControlUsuario" runat="server" Text="Generar datos de control" TabIndex="14" OnClick="btnControlUsuario_Click" />
@@ -695,6 +724,7 @@
                                                 <div class="form-group col-md-2">
                                                     <input type="text" class="form-control" runat="server" id="iUsuario" required="required" placeholder="Usuario" tabindex="15" disabled="disabled" />
                                                 </div>
+
                                                 <div class="form-group col-md-2">
                                                     <input type="password" class="form-control" runat="server" id="iClave" required="required" placeholder="Contraseña" tabindex="16" disabled="disabled" />
                                                 </div>

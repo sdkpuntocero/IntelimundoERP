@@ -27,9 +27,11 @@ namespace IntelimundoERP
         public string CodigoUsuario { get; set; }
         public string Usuario { get; set; }
         public string Clave { get; set; }
-        public string nombres { get; set; }
-        public string apaterno { get; set; }
-        public string amaterno { get; set; }
+        public string Nombres { get; set; }
+        public string Apaterno { get; set; }
+        public string Amaterno { get; set; }
+        public string CorreoPersonal { get; set; }
+        public string CorreoTrabajo { get; set; }
         public Nullable<int> GeneroID { get; set; }
         public Nullable<System.DateTime> FechaNacimiento { get; set; }
         public Nullable<int> EstatusRegistroID { get; set; }

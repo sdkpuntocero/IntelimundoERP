@@ -49,12 +49,12 @@ namespace IntelimundoERP
                     {
                         var i_df = (from a in m_df.tblUsuarios
 
-                                    where a.nombres.Contains(d_f)
+                                    where a.Nombres.Contains(d_f)
                                     where a.UsuarioID != usr_ID
 
                                     select new
                                     {
-                                        nom_comp = a.nombres + " " + a.apaterno + " " + a.amaterno,
+                                        nom_comp = a.Nombres + " " + a.Apaterno + " " + a.Amaterno,
                                         a.CodigoUsuario,
                                     }).ToList();
 
@@ -83,6 +83,22 @@ namespace IntelimundoERP
                 {
                     case 1:
 
+                        var iUsuarioDev = (from a in mUsuario.tblUsuarios
+
+                                           where a.UsuarioID == usr_ID
+                                           select new
+                                           {
+                                               a.PerfilID,
+                                               a.Nombres,
+                                               a.Apaterno,
+                                               a.Amaterno,
+                                           }
+                                ).FirstOrDefault();
+
+                        lblNombreUsuario.Text = iUsuarioDev.Nombres;
+                        lblNombreApellidos.Text = iUsuarioDev.Apaterno + ' ' + iUsuarioDev.Amaterno;
+                        lblCorporativo.Text = "Desarrollo";
+
                         break;
 
                     case 2:
@@ -94,15 +110,15 @@ namespace IntelimundoERP
                                                select new
                                                {
                                                    a.PerfilID,
-                                                   a.nombres,
-                                                   a.apaterno,
-                                                   a.amaterno,
+                                                   a.Nombres,
+                                                   a.Apaterno,
+                                                   a.Amaterno,
                                                    c.Nombre
                                                }
                                 ).FirstOrDefault();
 
-                        lblNombreUsuario.Text = iUsuarioEmpresa.nombres;
-                        lblNombreApellidos.Text = iUsuarioEmpresa.apaterno + ' ' + iUsuarioEmpresa.amaterno;
+                        lblNombreUsuario.Text = iUsuarioEmpresa.Nombres;
+                        lblNombreApellidos.Text = iUsuarioEmpresa.Apaterno + ' ' + iUsuarioEmpresa.Amaterno;
                         lblCorporativo.Text = "Corporativo: " + iUsuarioEmpresa.Nombre;
 
                         break;
@@ -116,14 +132,14 @@ namespace IntelimundoERP
                                             select new
                                             {
                                                 a.PerfilID,
-                                                a.nombres,
-                                                a.apaterno,
-                                                a.amaterno,
+                                                a.Nombres,
+                                                a.Apaterno,
+                                                a.Amaterno,
                                                 c.Nombre
                                             }).FirstOrDefault();
 
-                        lblNombreUsuario.Text = iUsuarioCorp.nombres;
-                        lblNombreApellidos.Text = iUsuarioCorp.apaterno + ' ' + iUsuarioCorp.amaterno;
+                        lblNombreUsuario.Text = iUsuarioCorp.Nombres;
+                        lblNombreApellidos.Text = iUsuarioCorp.Apaterno + ' ' + iUsuarioCorp.Amaterno;
                         lblCorporativo.Text = "Corporativo: " + iUsuarioCorp.Nombre;
 
                         break;
@@ -275,6 +291,7 @@ namespace IntelimundoERP
         protected void sBusquedaUsuario_SelectedIndexChanged(object sender, EventArgs e)
         {
             BusquedaUsuarioID = int.Parse(sBusquedaUsuario.SelectedValue);
+            iUsuarioBuscar.Text = string.Empty;
         }
 
         protected void lkbUsuarioBuscar_Click(object sender, EventArgs e)
@@ -282,71 +299,16 @@ namespace IntelimundoERP
             divDatosUsuario.Visible = false;
             gvUsuarios.Visible = false;
             string strCodigoUsuario = iUsuarioBuscar.Text;
+            usr_ID = (Guid)(Session["UsuarioFirmadoID"]);
 
             if (sBusquedaUsuario.SelectedIndex != 0)
             {
-                using (IntelimundoERPEntities md_fb = new IntelimundoERPEntities())
-                {
-                    if (strCodigoUsuario == "TODO")
-                    {
+                DataSet ListUsuarios = ControlUsuarios.FiltroUsuarios(strCodigoUsuario, usr_ID);
 
-                        var i_f_b = (from a in md_fb.tblUsuarios
-                                     select new
-                                     {
-                                         a.UsuarioID,
-                                         a.CodigoUsuario,
-                                         nom_comp = a.nombres + " " + a.apaterno + " " + a.amaterno,
-                                         a.FechaRegistro
-                                     }).Distinct().ToList();
-
-                        if (i_f_b.Count == 0)
-                        {
-                            gvUsuarios.DataSource = i_f_b;
-                            gvUsuarios.DataBind();
-                            gvUsuarios.Visible = true;
-
-                            Mensaje("Usuario no encontrado.");
-                        }
-                        else
-                        {
-                            gvUsuarios.DataSource = i_f_b;
-                            gvUsuarios.DataBind();
-                            gvUsuarios.Visible = true;
-                        }
-
-                    }
-                    else
-                    {
-                        var i_f_b = (from a in md_fb.tblUsuarios
-                                     where a.CodigoUsuario == strCodigoUsuario
-                                     select new
-                                     {
-                                         a.UsuarioID,
-                                         a.CodigoUsuario,
-                                         nom_comp = a.nombres + " " + a.apaterno + " " + a.amaterno,
-                                         a.FechaRegistro
-                                     }).Distinct().ToList();
-
-                        if (i_f_b.Count == 0)
-                        {
-                            gvUsuarios.DataSource = i_f_b;
-                            gvUsuarios.DataBind();
-                            gvUsuarios.Visible = true;
-
-                            Mensaje("Usuario no encontrado.");
-                        }
-                        else
-                        {
-                            gvUsuarios.DataSource = i_f_b;
-                            gvUsuarios.DataBind();
-                            gvUsuarios.Visible = true;
-                        }
-
-                    }
-
-                }
+                gvUsuarios.DataSource = ListUsuarios;
+                gvUsuarios.DataBind();
+                gvUsuarios.Visible = true;
             }
-
             else
             {
                 Mensaje("Seleccionar tipo de busqueda");
@@ -356,6 +318,7 @@ namespace IntelimundoERP
         #endregion BusquedaDeUsuarios
 
         #region TablaUsuarios
+
         protected void gvUsuarios_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -396,100 +359,62 @@ namespace IntelimundoERP
             {
                 try
                 {
-                    GridViewRow gvr = (GridViewRow)(((Button)e.CommandSource).NamingContainer);
+                    GridViewRow gvr = (GridViewRow)(((LinkButton)e.CommandSource).NamingContainer);
                     Guid UsuarioFilradoID;
                     UsuarioFilradoID = Guid.Parse(gvr.Cells[0].Text.ToString().Trim());
 
-                    using (IntelimundoERPEntities mInformacionusuario = new IntelimundoERPEntities())
+                    DataSet ListUsuarios = ControlUsuarios.FiltroUsuario(UsuarioFilradoID);
+
+                    gvUsuarios.DataSource = ListUsuarios;
+                    gvUsuarios.DataBind();
+                    gvUsuarios.Visible = true;
+
+                    DataSet informacionUsuarios = ControlUsuarios.InformacionUsuario(UsuarioFilradoID);
+
+                    sComposUsuario();
+
+                    sAreaUsuario.SelectedValue = informacionUsuarios.Tables[0].Rows[0]["AreaID"].ToString();
+
+                    int iAreaUusarios = int.Parse(informacionUsuarios.Tables[0].Rows[0]["AreaID"].ToString());
+
+                    sPerfilUsuario.Items.Clear();
+
+                    using (IntelimundoERPEntities mConfiguracion = new IntelimundoERPEntities())
                     {
+                        var dConfiguracion = (from a in mConfiguracion.catPerfil
+                                              join b in mConfiguracion.tblAreasPerfil on a.PerfilID equals b.PerfilID
+                                              where b.AreaID == iAreaUusarios
+                                              select a).ToList();
 
-                        var fInformacionusuario = (from a in mInformacionusuario.tblUsuarios
-                                                   where a.UsuarioID == UsuarioFilradoID
-                                                   select new
-                                                   {
-                                                       a.UsuarioID,
-                                                       a.CodigoUsuario,
-                                                       nom_comp = a.nombres + " " + a.apaterno + " " + a.amaterno,
-                                                       a.FechaRegistro
-                                                   }).Distinct().ToList();
+                        sPerfilUsuario.DataSource = dConfiguracion;
+                        sPerfilUsuario.DataTextField = "Descripcion";
+                        sPerfilUsuario.DataValueField = "PerfilID";
+                        sPerfilUsuario.DataBind();
 
-                        if (fInformacionusuario.Count == 0)
-                        {
-                            gvUsuarios.DataSource = fInformacionusuario;
-                            gvUsuarios.DataBind();
-                            gvUsuarios.Visible = true;
-
-                            Mensaje("Usuario no encontrado.");
-                        }
-                        else
-                        {
-                            gvUsuarios.DataSource = fInformacionusuario;
-                            gvUsuarios.DataBind();
-                            gvUsuarios.Visible = true;
-                        }
-
-                        var iInformacionusuario = (from a in mInformacionusuario.tblUsuarios
-                                                   join b in mInformacionusuario.tblAreasPerfil on a.PerfilID equals b.PerfilID
-                                                   join c in mInformacionusuario.catAreas on b.AreaID equals c.AreaID
-                                                   where a.UsuarioID == UsuarioFilradoID
-                                                   select new
-                                                   {
-                                                       c.AreaID,
-                                                       c.Descripcion,
-                                                       a.FechaNacimiento,
-                                                       a.PerfilID,
-                                                       a.GeneroID,
-                                                       a.nombres,
-                                                       a.apaterno,
-                                                       a.amaterno,
-                                                       a.CodigoUsuario
-                                                   }).FirstOrDefault();
-
-                        sComposUsuario();
-
-                        sAreaUsuario.SelectedValue = iInformacionusuario.AreaID.ToString();
-
-                        int iAreaUusarios = int.Parse(iInformacionusuario.AreaID.ToString());
-
-                        sPerfilUsuario.Items.Clear();
-
-                        using (IntelimundoERPEntities mConfiguracion = new IntelimundoERPEntities())
-                        {
-                            var dConfiguracion = (from a in mConfiguracion.catPerfil
-                                                  join b in mConfiguracion.tblAreasPerfil on a.PerfilID equals b.PerfilID
-                                                  where b.AreaID == iAreaUusarios
-                                                  select a).ToList();
-
-                            sPerfilUsuario.DataSource = dConfiguracion;
-                            sPerfilUsuario.DataTextField = "Descripcion";
-                            sPerfilUsuario.DataValueField = "PerfilID";
-                            sPerfilUsuario.DataBind();
-
-                            sPerfilUsuario.Value = iInformacionusuario.PerfilID.ToString();
-                        }
-
-                        sGeneroUsuario.Value = iInformacionusuario.GeneroID.ToString();
-
-                        DateTime f_nac = DateTime.MinValue;
-                        if (iInformacionusuario.FechaNacimiento == null)
-                        {
-                        }
-                        else
-                        {
-                            f_nac = Convert.ToDateTime(iInformacionusuario.FechaNacimiento);
-                            iNacimientoUsuario.Value = f_nac.ToString("yyyy-MM-dd");
-                        }
-
-                        DateTime f_ing = Convert.ToDateTime(iInformacionusuario.FechaNacimiento);
-
-                        iNombresUsuario.Value = iInformacionusuario.nombres;
-                        iApaternoUsuario.Value = iInformacionusuario.apaterno;
-                        iAmaternoUsuario.Value = iInformacionusuario.amaterno;
-
-                        iUsuario.Value = iInformacionusuario.CodigoUsuario;
-
-                        divDatosUsuario.Visible = true;
+                        sPerfilUsuario.Value = informacionUsuarios.Tables[0].Rows[0]["PerfilID"].ToString();
                     }
+
+                    sGeneroUsuario.Value = informacionUsuarios.Tables[0].Rows[0]["GeneroID"].ToString();
+
+                    DateTime f_nac = DateTime.MinValue;
+                    if (informacionUsuarios.Tables[0].Rows[0]["FechaNacimiento"].ToString() == null)
+                    {
+                    }
+                    else
+                    {
+                        f_nac = Convert.ToDateTime(informacionUsuarios.Tables[0].Rows[0]["FechaNacimiento"].ToString());
+                        iNacimientoUsuario.Value = f_nac.ToString("yyyy-MM-dd");
+                    }
+
+                    DateTime f_ing = Convert.ToDateTime(informacionUsuarios.Tables[0].Rows[0]["FechaNacimiento"].ToString());
+
+                    iNombresUsuario.Value = informacionUsuarios.Tables[0].Rows[0]["Nombres"].ToString();
+                    iApaternoUsuario.Value = informacionUsuarios.Tables[0].Rows[0]["Apaterno"].ToString();
+                    iAmaternoUsuario.Value = informacionUsuarios.Tables[0].Rows[0]["Amaterno"].ToString();
+
+                    iUsuario.Value = informacionUsuarios.Tables[0].Rows[0]["Usuario"].ToString();
+
+                    divDatosUsuario.Visible = true;
                 }
                 catch
                 {
@@ -499,7 +424,9 @@ namespace IntelimundoERP
                 }
             }
         }
-        #endregion
+
+        #endregion TablaUsuarios
+
         protected void btnUsuarioG_Click(object sender, EventArgs e)
         {
             string striNombreUsuario = Request.Form["iNombresUsuario"];
@@ -508,8 +435,10 @@ namespace IntelimundoERP
             int sGeneroUsuario = int.Parse(Request.Form["sGeneroUsuario"]);
             DateTime iNacimientoUsuario = DateTime.Parse(Request.Form["iNacimientoUsuario"]);
             int sPerfilUsuario = int.Parse(Request.Form["sPerfilUsuario"]);
+            string striEmailPersonalUsuario = Request.Form["iEmailPersonalUsuario"];
+            string striEmailCorporativoUsuario = Request.Form["iEmailCorporativoUsuario"];
 
-            if (ControlUsuarios.AltaUsuario(3, sPerfilUsuario, sGeneroUsuario, iNacimientoUsuario, striNombreUsuario, striApaternoUsuario, striAmaternoUsuario))
+            if (ControlUsuarios.AltaUsuario(3, sPerfilUsuario, sGeneroUsuario, iNacimientoUsuario, striNombreUsuario, striApaternoUsuario, striAmaternoUsuario, striEmailPersonalUsuario, striEmailCorporativoUsuario))
 
             {
                 limpiaRegistroUsuario();
@@ -520,10 +449,6 @@ namespace IntelimundoERP
                 Mensaje("Error.");
             }
         }
-
-
-
-
 
         private void sComposUsuario()
         {
@@ -583,14 +508,14 @@ namespace IntelimundoERP
         {
             Guid guid_usr = Guid.NewGuid();
 
-            string i_nombres = string.Empty, i_aparterno = string.Empty, i_amaterno = string.Empty, strUsuario = string.Empty, str_clave = string.Empty;
-            string i_nombres_o = Request.Form["iNombresUsuario"];
+            string i_Nombres = string.Empty, i_aparterno = string.Empty, i_Amaterno = string.Empty, strUsuario = string.Empty, str_clave = string.Empty;
+            string i_Nombres_o = Request.Form["iNombresUsuario"];
             string i_aparterno_o = Request.Form["iApaternoUsuario"];
-            string i_amaterno_o = Request.Form["iAmaternoUsuario"];
+            string i_Amaterno_o = Request.Form["iAmaternoUsuario"];
 
             try
             {
-                strUsuario = ControlUsuarios.GeneraUsuario(i_nombres_o, i_aparterno_o, i_amaterno_o);
+                strUsuario = ControlUsuarios.GeneraUsuario(i_Nombres_o, i_aparterno_o, i_Amaterno_o);
                 iUsuario.Value = strUsuario;
 
                 iEmailCorporativoUsuario.Value = strUsuario + "@intelimundo.com.mx";
@@ -602,8 +527,6 @@ namespace IntelimundoERP
             }
         }
 
-
-
         private void limpiaRegistroUsuario()
         {
             sComposUsuario();
@@ -614,11 +537,14 @@ namespace IntelimundoERP
             iUsuario.Value = string.Empty;
             iClave.Value = string.Empty;
             iEmailCorporativoUsuario.Value = string.Empty;
+            iEmailPersonalUsuario.Value = string.Empty;
+            iEmailCorporativoUsuario.Value = string.Empty;
         }
 
         #endregion ControlUsuarios
 
         #region Configuracion
+
         protected void lkbSalir_Click(object sender, EventArgs e)
         {
             Session.Abandon();
@@ -646,6 +572,7 @@ namespace IntelimundoERP
         protected void btnCodigoPostalFiscalC_Click(object sender, EventArgs e)
         {
         }
+
         protected void lkbRegIniEdit_Click(object sender, EventArgs e)
         {
             using (IntelimundoERPEntities mRegistroInicial = new IntelimundoERPEntities())
@@ -665,9 +592,9 @@ namespace IntelimundoERP
                 }
                 else
                 {
-                    iNombreDirector.Value = iDirector[0].nombres;
-                    iApaternoDirector.Value = iDirector[0].apaterno;
-                    iAmaternoDirector.Value = iDirector[0].amaterno;
+                    iNombreDirector.Value = iDirector[0].Nombres;
+                    iApaternoDirector.Value = iDirector[0].Apaterno;
+                    iAmaternoDirector.Value = iDirector[0].Amaterno;
                     iNombreEmpresa.Value = iRegistroInicial[0].Nombre;
                     sTipoRFCEmpresa.Value = iRegistroInicial[0].TipoRFCID.ToString();
                     iRFCEmpresa.Value = iRegistroInicial[0].RFC;
@@ -918,10 +845,8 @@ namespace IntelimundoERP
             upConfiguracion.Update();
         }
 
-
         protected void btnRegistroInicialG_Click(object sender, EventArgs e)
         {
-
             string striNombreDirector = Request.Form["iNombreDirector"];
             string striApaternoDirector = Request.Form["iApaternoDirector"];
             string striAmaternoDirector = Request.Form["iAmaternoDirector"];
@@ -940,10 +865,8 @@ namespace IntelimundoERP
             string striCodigoPostalCorporativo = Request.Form["iCodigoPostalCorporativo"];
             int sColoniaCorporativo = int.Parse(Request.Form["sColoniaCorporativo"]);
 
-
-
             ControlEmpresa.AltaEmpresa(striNombreEmpresa, sTipoRFCEmpresa, striRFCEmpresa, striEmailEmpresa, striTelefonoEmpresa, striCalleNumeroEmpresa, striCodigoPostalEmpresa, sColoniaEmpresa);
-            ControlUsuarios.AltaUsuario(2, 2, 1, DateTime.Now, striNombreDirector, striApaternoDirector, striAmaternoDirector);
+            ControlUsuarios.AltaUsuario(2, 2, 1, DateTime.Now, striNombreDirector, striApaternoDirector, striAmaternoDirector, striEmailEmpresa, striEmailCorporativo);
 
             if (ControlCorporativo.AltaCorporativo(striNombreCorporativo, striEmailCorporativo, striTelefonoCorporativo, striCalleNumeroCorporativo, striCodigoPostalCorporativo, sColoniaCorporativo))
 
@@ -981,8 +904,6 @@ namespace IntelimundoERP
             string iSMTP = Request.Form["i_smtp"];
             int iPuerto = int.Parse(Request.Form["i_puerto"]);
 
-
-
             if (EnviarCorreo.AltaNotificacion(iEmail, iUsuario, iClave, iAsunto, iSMTP, iPuerto))
             {
                 LimpiaNotificacion();
@@ -1000,6 +921,7 @@ namespace IntelimundoERP
         }
 
         #endregion Configuracion
+
         protected void lkbControlUsuarios_Click(object sender, EventArgs e)
         {
             breadcrumbN1.Text = "Control de Datos";
@@ -1013,6 +935,7 @@ namespace IntelimundoERP
             cardCentro.Visible = false;
             upCentro.Update();
         }
+
         private void Mensaje(string contenido)
         {
             lblModalTitle.Text = "Intelimundo";

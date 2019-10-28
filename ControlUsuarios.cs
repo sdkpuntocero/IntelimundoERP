@@ -8,7 +8,7 @@ namespace IntelimundoERP
 {
     public class ControlUsuarios
     {
-        public static bool AltaUsuario(int i_TipoUsuarioID, int i_PerfilUsuarioID, int sGeneroUsuario, DateTime iNacimientoUsuario, string Nombre, string Apaterno, string Amaterno)
+        public static bool AltaUsuario(int i_TipoUsuarioID, int i_PerfilUsuarioID, int sGeneroUsuario, DateTime iNacimientoUsuario, string Nombre, string Apaterno, string Amaterno, string striEmailPersonalUsuario, string striEmailCorporativoUsuario)
         {
             Guid i_UsuarioID, EmpresaID = Guid.NewGuid(), CorporativoID = Guid.NewGuid();
             string i_CodigoUsuario = string.Empty, i_nombres = string.Empty, i_apaterno = string.Empty, i_amaterno = string.Empty, i_usuario = string.Empty, i_clave = string.Empty;
@@ -79,10 +79,12 @@ namespace IntelimundoERP
                                     CodigoUsuario = i_CodigoUsuario,
                                     Usuario = i_usuario,
                                     Clave = i_clave,
-                                    nombres = strNombreUsuario,
-                                    apaterno = strApaternoUsuario,
-                                    amaterno = strAmaternoUsuario,
+                                    Nombres = strNombreUsuario,
+                                    Apaterno = strApaternoUsuario,
+                                    Amaterno = strAmaternoUsuario,
                                     GeneroID = sGeneroUsuario,
+                                    CorreoPersonal = striEmailPersonalUsuario,
+                                    CorreoTrabajo = striEmailCorporativoUsuario,
                                     FechaNacimiento = iNacimientoUsuario,
                                     EstatusRegistroID = 1,
                                     FechaRegistro = DateTime.Now
@@ -123,10 +125,12 @@ namespace IntelimundoERP
                                     CodigoUsuario = i_CodigoUsuario,
                                     Usuario = i_usuario,
                                     Clave = i_clave,
-                                    nombres = strNombreUsuario,
-                                    apaterno = strApaternoUsuario,
-                                    amaterno = strAmaternoUsuario,
+                                    Nombres = strNombreUsuario,
+                                    Apaterno = strApaternoUsuario,
+                                    Amaterno = strAmaternoUsuario,
                                     GeneroID = sGeneroUsuario,
+                                    CorreoPersonal = striEmailPersonalUsuario,
+                                    CorreoTrabajo = striEmailCorporativoUsuario,
                                     FechaNacimiento = iNacimientoUsuario,
                                     EstatusRegistroID = 1,
                                     FechaRegistro = DateTime.Now
@@ -182,7 +186,6 @@ namespace IntelimundoERP
 
         public static string GeneraUsuario(string Nombre, string Apaterno, string Amaterno)
         {
-            Guid i_UsuarioID, EmpresaID = Guid.NewGuid();
             string i_CodigoUsuario = string.Empty, i_nombres = string.Empty, i_apaterno = string.Empty, i_amaterno = string.Empty, i_usuario = string.Empty, i_clave = string.Empty;
             try
             {
@@ -202,6 +205,212 @@ namespace IntelimundoERP
             }
 
             return i_usuario;
+        }
+
+        public static DataSet FiltroUsuarios(string strCodigoUsuario, Guid usr_ID)
+        {
+            DataSet ds = new DataSet();
+            DataTable dt = new DataTable();
+
+            dt.Columns.Add("UsuarioID", typeof(Guid));
+            dt.Columns.Add("CodigoUsuario", typeof(string));
+            dt.Columns.Add("nom_comp", typeof(string));
+            dt.Columns.Add("FechaRegistro", typeof(DateTime));
+
+            using (IntelimundoERPEntities mUsuarios = new IntelimundoERPEntities())
+            {
+                if (strCodigoUsuario == "TODO")
+                {
+                    var iUsuarios = (from a in mUsuarios.tblUsuarios
+                                     where a.PerfilID != 1
+                                     where a.UsuarioID != usr_ID
+                                     select new
+                                     {
+                                         a.UsuarioID,
+                                         a.CodigoUsuario,
+                                         nom_comp = a.Nombres + " " + a.Apaterno + " " + a.Amaterno,
+                                         a.FechaRegistro
+                                     }).Distinct().ToList();
+
+                    if (iUsuarios.Count == 0)
+                    {
+                        return ds;
+                    }
+                    else
+                    {
+                        foreach (var item in iUsuarios)
+                        {
+                            DataRow row = dt.NewRow();
+
+                            row["UsuarioID"] = item.UsuarioID;
+                            row["CodigoUsuario"] = item.CodigoUsuario;
+                            row["nom_comp"] = item.nom_comp;
+                            row["FechaRegistro"] = item.FechaRegistro;
+
+                            dt.Rows.Add(row);
+                        }
+                    }
+                }
+                else
+                {
+                    Char char_s = '|';
+
+                    String[] de_rub = strCodigoUsuario.Trim().Split(char_s);
+
+                    if (de_rub.Length == 2)
+                    {
+                        strCodigoUsuario = de_rub[1].Trim();
+                    }
+
+                    var iUsuarios = (from a in mUsuarios.tblUsuarios
+                                     where a.CodigoUsuario == strCodigoUsuario
+                                     where a.PerfilID != 1
+                                     select new
+                                     {
+                                         a.UsuarioID,
+                                         a.CodigoUsuario,
+                                         nom_comp = a.Nombres + " " + a.Apaterno + " " + a.Amaterno,
+                                         a.FechaRegistro
+                                     }).Distinct().ToList();
+
+                    if (iUsuarios.Count == 0)
+                    {
+                        return ds;
+                    }
+                    else
+                    {
+                        foreach (var item in iUsuarios)
+                        {
+                            DataRow row = dt.NewRow();
+
+                            row["UsuarioID"] = item.UsuarioID;
+                            row["CodigoUsuario"] = item.CodigoUsuario;
+                            row["nom_comp"] = item.nom_comp;
+                            row["FechaRegistro"] = item.FechaRegistro;
+
+                            dt.Rows.Add(row);
+                        }
+                    }
+                }
+            }
+
+            ds.Tables.Add(dt);
+            return ds;
+        }
+
+        public static DataSet FiltroUsuario(Guid usr_ID)
+        {
+            DataSet ds = new DataSet();
+            DataTable dt = new DataTable();
+
+            dt.Columns.Add("UsuarioID", typeof(Guid));
+            dt.Columns.Add("CodigoUsuario", typeof(string));
+            dt.Columns.Add("nom_comp", typeof(string));
+            dt.Columns.Add("FechaRegistro", typeof(DateTime));
+
+            using (IntelimundoERPEntities mInformacionusuario = new IntelimundoERPEntities())
+            {
+                var fInformacionusuario = (from a in mInformacionusuario.tblUsuarios
+                                           where a.UsuarioID == usr_ID
+                                           select new
+                                           {
+                                               a.UsuarioID,
+                                               a.CodigoUsuario,
+                                               nom_comp = a.Nombres + " " + a.Apaterno + " " + a.Amaterno,
+                                               a.FechaRegistro
+                                           }).Distinct().ToList();
+
+                if (fInformacionusuario.Count == 0)
+                {
+                    return ds;
+                }
+                else
+                {
+                    foreach (var item in fInformacionusuario)
+                    {
+                        DataRow row = dt.NewRow();
+
+                        row["UsuarioID"] = item.UsuarioID;
+                        row["CodigoUsuario"] = item.CodigoUsuario;
+                        row["nom_comp"] = item.nom_comp;
+                        row["FechaRegistro"] = item.FechaRegistro;
+
+                        dt.Rows.Add(row);
+                    }
+                }
+
+                ds.Tables.Add(dt);
+                return ds;
+            }
+        }
+
+        public static DataSet InformacionUsuario(Guid usr_ID)
+        {
+            DataSet ds = new DataSet();
+            DataTable dt = new DataTable();
+
+            dt.Columns.Add("AreaID", typeof(int));
+            dt.Columns.Add("Descripcion", typeof(string));
+            dt.Columns.Add("FechaNacimiento", typeof(DateTime));
+            dt.Columns.Add("PerfilID", typeof(int));
+            dt.Columns.Add("GeneroID", typeof(int));
+            dt.Columns.Add("Nombres", typeof(string));
+            dt.Columns.Add("Apaterno", typeof(string));
+            dt.Columns.Add("Amaterno", typeof(string));
+            dt.Columns.Add("Usuario", typeof(string));
+            dt.Columns.Add("CodigoUsuario", typeof(string));
+            dt.Columns.Add("CorreoPersonal", typeof(string));
+
+            using (IntelimundoERPEntities mInformacionusuario = new IntelimundoERPEntities())
+            {
+                var iInformacionusuario = (from a in mInformacionusuario.tblUsuarios
+                                           join b in mInformacionusuario.tblAreasPerfil on a.PerfilID equals b.PerfilID
+                                           join c in mInformacionusuario.catAreas on b.AreaID equals c.AreaID
+                                           where a.UsuarioID == usr_ID
+                                           select new
+                                           {
+                                               c.AreaID,
+                                               c.Descripcion,
+                                               a.FechaNacimiento,
+                                               a.PerfilID,
+                                               a.GeneroID,
+                                               a.Nombres,
+                                               a.Apaterno,
+                                               a.Amaterno,
+                                               a.Usuario,
+                                               a.CodigoUsuario,
+                                               a.CorreoPersonal
+                                           }).ToList();
+
+                if (iInformacionusuario.Count == 0)
+                {
+                    return ds;
+                }
+                else
+                {
+                    foreach (var item in iInformacionusuario)
+                    {
+                        DataRow row = dt.NewRow();
+
+                        row["AreaID"] = item.AreaID;
+                        row["Descripcion"] = item.Descripcion;
+                        row["FechaNacimiento"] = item.FechaNacimiento;
+                        row["PerfilID"] = item.PerfilID;
+                        row["GeneroID"] = item.GeneroID;
+                        row["Nombres"] = item.Nombres;
+                        row["Apaterno"] = item.Apaterno;
+                        row["Amaterno"] = item.Amaterno;
+                        row["Usuario"] = item.Usuario;
+                        row["CodigoUsuario"] = item.CodigoUsuario;
+                        row["CorreoPersonal"] = item.CorreoPersonal;
+
+                        dt.Rows.Add(row);
+                    }
+                }
+            }
+
+            ds.Tables.Add(dt);
+            return ds;
         }
     }
 }

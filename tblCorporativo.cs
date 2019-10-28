@@ -19,6 +19,7 @@ namespace IntelimundoERP
         {
             this.catBusquedaUsuario = new HashSet<catBusquedaUsuario>();
             this.tblCentro = new HashSet<tblCentro>();
+            this.tblClientes = new HashSet<tblClientes>();
             this.tblUsuariosCorporativo = new HashSet<tblUsuariosCorporativo>();
             this.tblEgresos = new HashSet<tblEgresos>();
             this.tblNotificacion = new HashSet<tblNotificacion>();
@@ -40,6 +41,8 @@ namespace IntelimundoERP
         public virtual ICollection<catBusquedaUsuario> catBusquedaUsuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblCentro> tblCentro { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblClientes> tblClientes { get; set; }
         public virtual tblEmpresa tblEmpresa { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblUsuariosCorporativo> tblUsuariosCorporativo { get; set; }

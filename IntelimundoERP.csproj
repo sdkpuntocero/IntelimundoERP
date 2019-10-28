@@ -1675,7 +1675,6 @@
       <LastGenOutput>ModelERP.cs</LastGenOutput>
     </Content>
     <Content Include="Panel.aspx" />
-    <Content Include="PanelDeControl.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -1854,19 +1853,15 @@
     <Compile Include="Panel.aspx.designer.cs">
       <DependentUpon>Panel.aspx</DependentUpon>
     </Compile>
-    <Compile Include="PanelDeControl.aspx.cs">
-      <DependentUpon>PanelDeControl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PanelDeControl.aspx.designer.cs">
-      <DependentUpon>PanelDeControl.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemueveCaracteresEspeciales.cs" />
     <Compile Include="tblAreasPerfil.cs">
       <DependentUpon>ModelERP.tt</DependentUpon>
     </Compile>
     <Compile Include="tblCentro.cs">
+      <DependentUpon>ModelERP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblClientes.cs">
       <DependentUpon>ModelERP.tt</DependentUpon>
     </Compile>
     <Compile Include="tblControlLicencias.cs">
@@ -1888,6 +1883,9 @@
       <DependentUpon>ModelERP.tt</DependentUpon>
     </Compile>
     <Compile Include="tblServicios.cs">
+      <DependentUpon>ModelERP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblUsuarioCliente.cs">
       <DependentUpon>ModelERP.tt</DependentUpon>
     </Compile>
     <Compile Include="tblUsuarios.cs">
