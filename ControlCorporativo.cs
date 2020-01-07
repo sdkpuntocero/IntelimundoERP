@@ -17,8 +17,6 @@ namespace IntelimundoERP
             strNombreCorporativo = ciNombreCorporativo.ToTitleCase(striNombreCorporativo.ToLower());
             strCalleNumeroCorporativo = ciCalleNumeroCorporativo.ToTitleCase(striCalleNumeroCorporativo.ToLower());
 
-            string strNombreCorporativo = null, strCalleNumeroCorporativo = null;
-
             TextInfo ciEmpresa = new CultureInfo("es-MX", false).TextInfo;
             TextInfo ciCalleNumeroEmpresa = new CultureInfo("es-MX", false).TextInfo;
 

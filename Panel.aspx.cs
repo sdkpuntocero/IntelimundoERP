@@ -250,182 +250,19 @@ namespace IntelimundoERP
 
         #region ControlUsuarios
 
-        #region BusquedaDeUsuarios
-
-        private void SControlUsurio()
+        protected void lkbControlUsuarios_Click(object sender, EventArgs e)
         {
-            sBusquedaUsuario.Items.Clear();
-
-            using (IntelimundoERPEntities mConfiguracion = new IntelimundoERPEntities())
-            {
-                var dConfiguracion = (from c in mConfiguracion.catBusquedaUsuario
-                                      select c).ToList();
-
-                sBusquedaUsuario.DataSource = dConfiguracion;
-                sBusquedaUsuario.DataTextField = "BusquedaUsuario";
-                sBusquedaUsuario.DataValueField = "BusquedaUsuarioID";
-                sBusquedaUsuario.DataBind();
-
-                sBusquedaUsuario.Items.Insert(0, new ListItem("*Buscar Por:", string.Empty));
-            }
-        }
-
-        protected void lkbUsuarioAgregar_Click(object sender, EventArgs e)
-        {
-            sComposUsuario();
-            limpiaRegistroUsuario();
-            gvUsuarios.Visible = false;
-            divDatosUsuario.Visible = true;
-            divBuscaUsuario.Visible = false;
+            breadcrumbN1.Text = "Control de Datos";
+            breadcrumbN2.Text = "Usuarios";
+            navbreadcrumb.Visible = true;
+            upbreadcrumb.Update();
+            cardConfiguracion.Visible = false;
+            upConfiguracion.Update();
+            cardUsuario.Visible = true;
             upUsuario.Update();
+            cardCentro.Visible = false;
+            upCentro.Update();
         }
-
-        protected void lkbUsuarioEdita_Click(object sender, EventArgs e)
-        {
-            divDatosUsuario.Visible = false;
-            divBuscaUsuario.Visible = true;
-            SControlUsurio();
-            FiltroUP = "pnl_usr";
-        }
-
-        protected void sBusquedaUsuario_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            BusquedaUsuarioID = int.Parse(sBusquedaUsuario.SelectedValue);
-            iUsuarioBuscar.Text = string.Empty;
-        }
-
-        protected void lkbUsuarioBuscar_Click(object sender, EventArgs e)
-        {
-            divDatosUsuario.Visible = false;
-            gvUsuarios.Visible = false;
-            string strCodigoUsuario = iUsuarioBuscar.Text;
-            usr_ID = (Guid)(Session["UsuarioFirmadoID"]);
-
-            if (sBusquedaUsuario.SelectedIndex != 0)
-            {
-                DataSet ListUsuarios = ControlUsuarios.FiltroUsuarios(strCodigoUsuario, usr_ID);
-
-                gvUsuarios.DataSource = ListUsuarios;
-                gvUsuarios.DataBind();
-                gvUsuarios.Visible = true;
-            }
-            else
-            {
-                Mensaje("Seleccionar tipo de busqueda");
-            }
-        }
-
-        #endregion BusquedaDeUsuarios
-
-        #region TablaUsuarios
-
-        protected void gvUsuarios_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                Guid usr_ID = Guid.Parse(e.Row.Cells[0].Text);
-                int intEstatusRegistroID;
-
-                using (IntelimundoERPEntities mEstatusUsuario = new IntelimundoERPEntities())
-                {
-                    var iEstatusUsuario = (from md_usr in mEstatusUsuario.tblUsuarios
-                                           where md_usr.UsuarioID == usr_ID
-                                           select new
-                                           {
-                                               md_usr.EstatusRegistroID,
-                                           }).FirstOrDefault();
-
-                    intEstatusRegistroID = int.Parse(iEstatusUsuario.EstatusRegistroID.ToString());
-
-                    DropDownList ddl_est = (e.Row.FindControl("ddlEstatusUsuarioID") as DropDownList);
-
-                    var tbl_sepomex = (from c in mEstatusUsuario.catEstatusRegistro
-                                       select c).ToList();
-
-                    ddl_est.DataSource = tbl_sepomex;
-
-                    ddl_est.DataTextField = "EstatusRegistro";
-                    ddl_est.DataValueField = "EstatusRegistroID";
-                    ddl_est.DataBind();
-                    ddl_est.Items.Insert(0, new ListItem("Seleccionar", "0"));
-                    ddl_est.SelectedValue = intEstatusRegistroID.ToString();
-                }
-            }
-        }
-
-        protected void gvUsuarios_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-            if (e.CommandName == "cnInformacionUsuario")
-            {
-                try
-                {
-                    GridViewRow gvr = (GridViewRow)(((LinkButton)e.CommandSource).NamingContainer);
-                    Guid UsuarioFilradoID;
-                    UsuarioFilradoID = Guid.Parse(gvr.Cells[0].Text.ToString().Trim());
-
-                    DataSet ListUsuarios = ControlUsuarios.FiltroUsuario(UsuarioFilradoID);
-
-                    gvUsuarios.DataSource = ListUsuarios;
-                    gvUsuarios.DataBind();
-                    gvUsuarios.Visible = true;
-
-                    DataSet informacionUsuarios = ControlUsuarios.InformacionUsuario(UsuarioFilradoID);
-
-                    sComposUsuario();
-
-                    sAreaUsuario.SelectedValue = informacionUsuarios.Tables[0].Rows[0]["AreaID"].ToString();
-
-                    int iAreaUusarios = int.Parse(informacionUsuarios.Tables[0].Rows[0]["AreaID"].ToString());
-
-                    sPerfilUsuario.Items.Clear();
-
-                    using (IntelimundoERPEntities mConfiguracion = new IntelimundoERPEntities())
-                    {
-                        var dConfiguracion = (from a in mConfiguracion.catPerfil
-                                              join b in mConfiguracion.tblAreasPerfil on a.PerfilID equals b.PerfilID
-                                              where b.AreaID == iAreaUusarios
-                                              select a).ToList();
-
-                        sPerfilUsuario.DataSource = dConfiguracion;
-                        sPerfilUsuario.DataTextField = "Descripcion";
-                        sPerfilUsuario.DataValueField = "PerfilID";
-                        sPerfilUsuario.DataBind();
-
-                        sPerfilUsuario.Value = informacionUsuarios.Tables[0].Rows[0]["PerfilID"].ToString();
-                    }
-
-                    sGeneroUsuario.Value = informacionUsuarios.Tables[0].Rows[0]["GeneroID"].ToString();
-
-                    DateTime f_nac = DateTime.MinValue;
-                    if (informacionUsuarios.Tables[0].Rows[0]["FechaNacimiento"].ToString() == null)
-                    {
-                    }
-                    else
-                    {
-                        f_nac = Convert.ToDateTime(informacionUsuarios.Tables[0].Rows[0]["FechaNacimiento"].ToString());
-                        iNacimientoUsuario.Value = f_nac.ToString("yyyy-MM-dd");
-                    }
-
-                    DateTime f_ing = Convert.ToDateTime(informacionUsuarios.Tables[0].Rows[0]["FechaNacimiento"].ToString());
-
-                    iNombresUsuario.Value = informacionUsuarios.Tables[0].Rows[0]["Nombres"].ToString();
-                    iApaternoUsuario.Value = informacionUsuarios.Tables[0].Rows[0]["Apaterno"].ToString();
-                    iAmaternoUsuario.Value = informacionUsuarios.Tables[0].Rows[0]["Amaterno"].ToString();
-
-                    iUsuario.Value = informacionUsuarios.Tables[0].Rows[0]["Usuario"].ToString();
-
-                    divDatosUsuario.Visible = true;
-                }
-                catch
-                {
-                    limpiaRegistroUsuario();
-                    divDatosUsuario.Visible = true;
-                    Mensaje("Usuario no encontrado.");
-                }
-            }
-        }
-
-        #endregion TablaUsuarios
 
         protected void btnUsuarioG_Click(object sender, EventArgs e)
         {
@@ -540,6 +377,225 @@ namespace IntelimundoERP
             iEmailPersonalUsuario.Value = string.Empty;
             iEmailCorporativoUsuario.Value = string.Empty;
         }
+
+        #region BusquedaDeUsuarios
+
+        private void SControlUsurio()
+        {
+            sBusquedaUsuario.Items.Clear();
+
+            using (IntelimundoERPEntities mConfiguracion = new IntelimundoERPEntities())
+            {
+                var dConfiguracion = (from c in mConfiguracion.catBusquedaUsuario
+                                      select c).ToList();
+
+                sBusquedaUsuario.DataSource = dConfiguracion;
+                sBusquedaUsuario.DataTextField = "BusquedaUsuario";
+                sBusquedaUsuario.DataValueField = "BusquedaUsuarioID";
+                sBusquedaUsuario.DataBind();
+
+                sBusquedaUsuario.Items.Insert(0, new ListItem("*Buscar Por:", string.Empty));
+            }
+        }
+
+        protected void lkbUsuarioAgregar_Click(object sender, EventArgs e)
+        {
+            sComposUsuario();
+            limpiaRegistroUsuario();
+            gvUsuarios.Visible = false;
+            btnControlUsuario.Enabled = true;
+            divDatosUsuario.Visible = true;
+            divBuscaUsuario.Visible = false;
+            upUsuario.Update();
+        }
+
+        protected void lkbUsuarioEdita_Click(object sender, EventArgs e)
+        {
+            divDatosUsuario.Visible = false;
+            divBuscaUsuario.Visible = true;
+            iUsuarioBuscar.Text = string.Empty;
+            SControlUsurio();
+            FiltroUP = "pnl_usr";
+        }
+
+        protected void sBusquedaUsuario_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            BusquedaUsuarioID = int.Parse(sBusquedaUsuario.SelectedValue);
+            iUsuarioBuscar.Text = string.Empty;
+        }
+
+        protected void lkbUsuarioBuscar_Click(object sender, EventArgs e)
+        {
+            divDatosUsuario.Visible = false;
+            gvUsuarios.Visible = false;
+            string strCodigoUsuario = iUsuarioBuscar.Text;
+            usr_ID = (Guid)(Session["UsuarioFirmadoID"]);
+
+            if (sBusquedaUsuario.SelectedIndex != 0)
+            {
+                DataSet ListUsuarios = ControlUsuarios.FiltroUsuarios(strCodigoUsuario, usr_ID);
+
+                gvUsuarios.DataSource = ListUsuarios;
+                gvUsuarios.DataBind();
+                gvUsuarios.Visible = true;
+            }
+            else
+            {
+                Mensaje("Seleccionar tipo de búsqueda");
+            }
+        }
+
+        #endregion BusquedaDeUsuarios
+
+        #region TablaUsuarios
+
+        protected void gvUsuarios_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                Guid usr_ID = Guid.Parse(e.Row.Cells[0].Text);
+                int intEstatusRegistroID;
+
+                using (IntelimundoERPEntities mEstatusUsuario = new IntelimundoERPEntities())
+                {
+                    var iEstatusUsuario = (from md_usr in mEstatusUsuario.tblUsuarios
+                                           where md_usr.UsuarioID == usr_ID
+                                           select new
+                                           {
+                                               md_usr.EstatusRegistroID,
+                                           }).FirstOrDefault();
+
+                    intEstatusRegistroID = int.Parse(iEstatusUsuario.EstatusRegistroID.ToString());
+
+                    DropDownList ddl_est = (e.Row.FindControl("ddlEstatusUsuarioID") as DropDownList);
+
+                    var tbl_sepomex = (from c in mEstatusUsuario.catEstatusRegistro
+                                       select c).ToList();
+
+                    ddl_est.DataSource = tbl_sepomex;
+
+                    ddl_est.DataTextField = "EstatusRegistro";
+                    ddl_est.DataValueField = "EstatusRegistroID";
+                    ddl_est.DataBind();
+                    ddl_est.Items.Insert(0, new ListItem("Seleccionar", "0"));
+                    ddl_est.SelectedValue = intEstatusRegistroID.ToString();
+                }
+            }
+        }
+
+        protected void gvUsuarios_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            GridViewRow gvr = (GridViewRow)(((LinkButton)e.CommandSource).NamingContainer);
+            Guid UsuarioFilradoID;
+            UsuarioFilradoID = Guid.Parse(gvr.Cells[0].Text.ToString().Trim());
+
+            if (e.CommandName == "cnInformacionUsuario")
+            {
+                try
+                {
+                    DataSet ListUsuarios = ControlUsuarios.FiltroUsuario(UsuarioFilradoID);
+
+                    gvUsuarios.DataSource = ListUsuarios;
+                    gvUsuarios.DataBind();
+                    gvUsuarios.Visible = true;
+
+                    DataSet informacionUsuarios = ControlUsuarios.InformacionUsuario(UsuarioFilradoID);
+
+                    sComposUsuario();
+
+                    sAreaUsuario.SelectedValue = informacionUsuarios.Tables[0].Rows[0].ItemArray[0].ToString();
+
+                    int iAreaUusarios = int.Parse(informacionUsuarios.Tables[0].Rows[0].ItemArray[0].ToString());
+
+                    sPerfilUsuario.Items.Clear();
+
+                    using (IntelimundoERPEntities mConfiguracion = new IntelimundoERPEntities())
+                    {
+                        var dConfiguracion = (from a in mConfiguracion.catPerfil
+                                              join b in mConfiguracion.tblAreasPerfil on a.PerfilID equals b.PerfilID
+                                              where b.AreaID == iAreaUusarios
+                                              select a).ToList();
+
+                        sPerfilUsuario.DataSource = dConfiguracion;
+                        sPerfilUsuario.DataTextField = "Descripcion";
+                        sPerfilUsuario.DataValueField = "PerfilID";
+                        sPerfilUsuario.DataBind();
+
+                        sPerfilUsuario.Value = informacionUsuarios.Tables[0].Rows[0].ItemArray[3].ToString();
+                    }
+
+                    sGeneroUsuario.Value = informacionUsuarios.Tables[0].Rows[0].ItemArray[4].ToString();
+                    DateTime f_nac = DateTime.MinValue;
+
+                    f_nac = Convert.ToDateTime(informacionUsuarios.Tables[0].Rows[0].ItemArray[2].ToString());
+                    iNacimientoUsuario.Value = f_nac.ToString("yyyy-MM-dd");
+
+                    DateTime f_ing = Convert.ToDateTime(informacionUsuarios.Tables[0].Rows[0].ItemArray[2].ToString());
+
+                    iNombresUsuario.Value = informacionUsuarios.Tables[0].Rows[0].ItemArray[5].ToString();
+                    iApaternoUsuario.Value = informacionUsuarios.Tables[0].Rows[0].ItemArray[6].ToString();
+                    iAmaternoUsuario.Value = informacionUsuarios.Tables[0].Rows[0].ItemArray[7].ToString();
+
+                    iUsuario.Value = informacionUsuarios.Tables[0].Rows[0].ItemArray[8].ToString();
+                    iEmailPersonalUsuario.Value = informacionUsuarios.Tables[0].Rows[0].ItemArray[10].ToString();
+                    iEmailCorporativoUsuario.Value = informacionUsuarios.Tables[0].Rows[0].ItemArray[11].ToString();
+                    btnControlUsuario.Enabled = false;
+                    btnUsuarioG.Visible = false;
+                    iClave.Attributes.Remove("disabled");
+                    divDatosUsuario.Visible = true;
+                }
+                catch
+                {
+                    limpiaRegistroUsuario();
+                    divDatosUsuario.Visible = true;
+                    Mensaje("Usuario no encontrado.");
+                }
+            }
+            else if (e.CommandName == "cnInformacionUsuarioG")
+            {
+                if (divDatosUsuario.Visible == false)
+                {
+                    Mensaje("Favor de cargar datos.");
+                }
+                else
+                {
+                    string striNombreUsuario = Request.Form["iNombresUsuario"];
+                    string striApaternoUsuario = Request.Form["iApaternoUsuario"];
+                    string striAmaternoUsuario = Request.Form["iAmaternoUsuario"];
+                    int sGeneroUsuario = int.Parse(Request.Form["sGeneroUsuario"]);
+                    DateTime iNacimientoUsuario = DateTime.Parse(Request.Form["iNacimientoUsuario"]);
+                    int sPerfilUsuario = int.Parse(Request.Form["sPerfilUsuario"]);
+                    string striEmailPersonalUsuario = Request.Form["iEmailPersonalUsuario"];
+                    string strClave = Request.Form["iClave"];
+                    string striEmailCorporativoUsuario = Request.Form["iEmailCorporativoUsuario"];
+                    int iEstatusUsuario = 0;
+
+                    foreach (GridViewRow row in gvUsuarios.Rows)
+                    {
+                        if (row.RowType == DataControlRowType.DataRow)
+                        {
+                            DropDownList dl = (DropDownList)row.FindControl("ddlEstatusUsuarioID");
+
+                            iEstatusUsuario = int.Parse(dl.SelectedValue);
+                        }
+                    }
+
+                    Guid UsuarioID = (Guid)(Session["UsuarioFirmadoID"]);
+                    if (ControlUsuarios.EditaUsuario(UsuarioFilradoID, sPerfilUsuario, sGeneroUsuario, iNacimientoUsuario, striNombreUsuario, striApaternoUsuario, striAmaternoUsuario, strClave, striEmailPersonalUsuario, striEmailCorporativoUsuario, iEstatusUsuario))
+
+                    {
+                        limpiaRegistroUsuario();
+                        Mensaje("Datos actualizados con éxito, favor de revisar su correo donde se le enviaran las credenciales de acceso, revisar su bandeja de spam");
+                    }
+                    else
+                    {
+                        Mensaje("Error.");
+                    }
+                }
+            }
+        }
+
+        #endregion TablaUsuarios
 
         #endregion ControlUsuarios
 
@@ -921,20 +977,6 @@ namespace IntelimundoERP
         }
 
         #endregion Configuracion
-
-        protected void lkbControlUsuarios_Click(object sender, EventArgs e)
-        {
-            breadcrumbN1.Text = "Control de Datos";
-            breadcrumbN2.Text = "Usuarios";
-            navbreadcrumb.Visible = true;
-            upbreadcrumb.Update();
-            cardConfiguracion.Visible = false;
-            upConfiguracion.Update();
-            cardUsuario.Visible = true;
-            upUsuario.Update();
-            cardCentro.Visible = false;
-            upCentro.Update();
-        }
 
         private void Mensaje(string contenido)
         {

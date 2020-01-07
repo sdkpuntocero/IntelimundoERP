@@ -21,22 +21,7 @@ namespace IntelimundoERP
             string strApaternoUsuario = CIApaterno.ToTitleCase(Apaterno.ToLower());
             string strAmaternoUsuario = CIAmaterno.ToTitleCase(Amaterno.ToLower());
 
-            try
-            {
-                i_nombres = RemueveCaracteresEspeciales.Acentos(RemueveCaracteresEspeciales.CaracteresEspeciales(Nombre.Trim().ToLower()));
-                string[] separados;
-
-                separados = Nombre.Split(" ".ToCharArray());
-
-                i_apaterno = RemueveCaracteresEspeciales.Acentos(RemueveCaracteresEspeciales.CaracteresEspeciales(Apaterno.Trim().ToLower()));
-                i_amaterno = RemueveCaracteresEspeciales.Acentos(RemueveCaracteresEspeciales.CaracteresEspeciales(Amaterno.Trim().ToLower()));
-
-                i_usuario = IzquierdaMedioDerecha.Izquierda(i_nombres, 1) + Apaterno.ToLower() + IzquierdaMedioDerecha.Izquierda(i_amaterno, 1);
-            }
-            catch
-            {
-                //"Se requiere minimo 2 letras por cada campo(nombre,apellido paterno, apellido materno) para generar el usuario.";
-            }
+            i_usuario = GeneraUsuario(Nombre, Apaterno, Amaterno);
 
             try
             {
@@ -160,6 +145,8 @@ namespace IntelimundoERP
             {
                 return false;
             }
+
+            
         }
 
         private static string GeneraCodigoUsuario()
@@ -186,7 +173,7 @@ namespace IntelimundoERP
 
         public static string GeneraUsuario(string Nombre, string Apaterno, string Amaterno)
         {
-            string i_CodigoUsuario = string.Empty, i_nombres = string.Empty, i_apaterno = string.Empty, i_amaterno = string.Empty, i_usuario = string.Empty, i_clave = string.Empty;
+            string i_nombres = string.Empty, i_apaterno = string.Empty, i_amaterno = string.Empty, i_usuario = string.Empty;
             try
             {
                 i_nombres = RemueveCaracteresEspeciales.Acentos(RemueveCaracteresEspeciales.CaracteresEspeciales(Nombre.Trim().ToLower()));
@@ -360,6 +347,7 @@ namespace IntelimundoERP
             dt.Columns.Add("Usuario", typeof(string));
             dt.Columns.Add("CodigoUsuario", typeof(string));
             dt.Columns.Add("CorreoPersonal", typeof(string));
+            dt.Columns.Add("CorreoTrabajo", typeof(string));
 
             using (IntelimundoERPEntities mInformacionusuario = new IntelimundoERPEntities())
             {
@@ -379,7 +367,8 @@ namespace IntelimundoERP
                                                a.Amaterno,
                                                a.Usuario,
                                                a.CodigoUsuario,
-                                               a.CorreoPersonal
+                                               a.CorreoPersonal,
+                                               a.CorreoTrabajo
                                            }).ToList();
 
                 if (iInformacionusuario.Count == 0)
@@ -403,7 +392,7 @@ namespace IntelimundoERP
                         row["Usuario"] = item.Usuario;
                         row["CodigoUsuario"] = item.CodigoUsuario;
                         row["CorreoPersonal"] = item.CorreoPersonal;
-
+                        row["CorreoTrabajo"] = item.CorreoTrabajo;
                         dt.Rows.Add(row);
                     }
                 }
@@ -411,6 +400,49 @@ namespace IntelimundoERP
 
             ds.Tables.Add(dt);
             return ds;
+        }
+
+        public static bool EditaUsuario(Guid i_UsuarioID, int i_PerfilUsuarioID, int sGeneroUsuario, DateTime iNacimientoUsuario, string Nombre, string Apaterno, string Amaterno, string strClave, string striEmailPersonalUsuario, string striEmailCorporativoUsuario, int iEstatusUsuario)
+        {
+            string i_nombres = string.Empty, i_apaterno = string.Empty, i_amaterno = string.Empty, i_clave = string.Empty;
+
+            TextInfo CINombre = new CultureInfo("es-MX", false).TextInfo;
+            TextInfo CIApaterno = new CultureInfo("es-MX", false).TextInfo;
+            TextInfo CIAmaterno = new CultureInfo("es-MX", false).TextInfo;
+
+            string strNombreUsuario = CINombre.ToTitleCase(Nombre.ToLower());
+            string strApaternoUsuario = CIApaterno.ToTitleCase(Apaterno.ToLower());
+            string strAmaternoUsuario = CIAmaterno.ToTitleCase(Amaterno.ToLower());
+
+            try
+            {
+                i_clave = Encrypta.Encrypt(strClave);
+
+                using (var mUsuarioE = new IntelimundoERPEntities())
+                {
+                    var iUsuarioE = (from c in mUsuarioE.tblUsuarios
+                                     where c.UsuarioID == i_UsuarioID
+                                     select c).FirstOrDefault();
+
+                    iUsuarioE.PerfilID = i_PerfilUsuarioID;
+                    iUsuarioE.Clave = i_clave;
+                    iUsuarioE.Nombres = strNombreUsuario;
+                    iUsuarioE.Apaterno = strApaternoUsuario;
+                    iUsuarioE.Amaterno = strAmaternoUsuario;
+                    iUsuarioE.GeneroID = sGeneroUsuario;
+                    iUsuarioE.CorreoPersonal = striEmailPersonalUsuario;
+                    iUsuarioE.CorreoTrabajo = striEmailCorporativoUsuario;
+                    iUsuarioE.FechaNacimiento = iNacimientoUsuario;
+                    iUsuarioE.EstatusRegistroID = iEstatusUsuario;
+                    mUsuarioE.SaveChanges();
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

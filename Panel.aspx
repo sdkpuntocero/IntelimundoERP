@@ -11,6 +11,7 @@
     <script src="Scripts/jquery-3.4.1.min.js"></script>
     <script src="Scripts/popper.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
+
     <title>IM</title>
 </head>
 
@@ -48,20 +49,7 @@
             });
 
         });
-        $(document).ready(function () {
-            $("#show_hide_password a").on('click', function (event) {
-                event.preventDefault();
-                if ($('#show_hide_password input').attr("type") == "text") {
-                    $('#show_hide_password input').attr('type', 'password');
-                    $('#show_hide_password i').addClass("fa-eye-slash");
-                    $('#show_hide_password i').removeClass("fa-eye");
-                } else if ($('#show_hide_password input').attr("type") == "password") {
-                    $('#show_hide_password input').attr('type', 'text');
-                    $('#show_hide_password i').removeClass("fa-eye-slash");
-                    $('#show_hide_password i').addClass("fa-eye");
-                }
-            });
-        });
+
     </script>
 
     <form runat="server">
@@ -276,7 +264,7 @@
                                 <ContentTemplate>
                                     <li>
 
-                                        <asp:LinkButton CssClass="buttonClass" ID="LinkButton2" runat="server" OnClick="lkbControlUsuarios_Click">
+                                        <asp:LinkButton CssClass="buttonClass" ID="LinkButton2" runat="server" >
                                             <i class="fas fa-book"></i>
                                             <span>Materiales
                                             </span>
@@ -647,7 +635,7 @@
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="">
                                                             <ItemTemplate>
-                                                                <asp:LinkButton CssClass="" ID="LinkButton2" runat="server" ToolTip="Guarda cambios de Información de Usuario">
+                                                                <asp:LinkButton CssClass="" ID="LinkButton2" runat="server" CausesValidation="false" CommandName="cnInformacionUsuarioG" ToolTip="Guarda cambios de Información de Usuario" >
                                             <i class="fas fa-save text-secondary fa-lg"></i>
                                                                 </asp:LinkButton>
                                                             </ItemTemplate>
